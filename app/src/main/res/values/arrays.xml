@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.                                 
+                                                                    
+This program is distributed in the hope that it will be useful,     
+but WITHOUT ANY WARRANTY; without even the implied warranty of      
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.                        
+                                                                    
+You should have received a copy of the GNU General Public License   
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
+<resources>
+    <string-array name="conversation_actions">
+        <item>@string/conversation_action_copy_peer_number</item>
+        <item>@string/conversation_action_history_clear</item>
+        <item>@string/delete_contact</item>
+        <item>@string/conversation_action_block_this</item>
+    </string-array>
+    <string-array name="swarm_one_to_one_actions">
+        <item>@string/conversation_action_copy_peer_number</item>
+        <item>@string/remove_conversation</item>
+        <item>@string/delete_contact</item>
+        <item>@string/conversation_action_block_this</item>
+    </string-array>
+    <string-array name="swarm_group_actions">
+        <item>@string/swarm_group_action_leave</item>
+    </string-array>
+    <array name="swarm_group_action_icons">
+        <item>@drawable/baseline_delete_24</item>
+    </array>
+
+    <array name="conversation_action_icons">
+        <item>@drawable/outline_copy_24</item>
+        <item>@drawable/baseline_clear_all_24</item>
+        <item>@drawable/baseline_androidtv_deletecontact</item>
+        <item>@drawable/baseline_block_24</item>
+    </array>
+
+    <array name="swarm_one_to_one_action_icons">
+        <item>@drawable/outline_copy_24</item>
+        <item>@drawable/baseline_delete_24</item>
+        <item>@drawable/baseline_androidtv_deletecontact</item>
+        <item>@drawable/baseline_block_24</item>
+    </array>
+
+    <string-array name="swarm_request_one_to_one_actions">
+        <item>@string/accept_invitation</item>
+        <item>@string/decline_invitation</item>
+        <item>@string/conversation_action_block_this</item>
+    </string-array>
+    <string-array name="swarm_request_group_actions">
+        <item>@string/accept_invitation</item>
+        <item>@string/decline_invitation</item>
+    </string-array>
+
+    <string-array name="video_bitrates">
+        <item>0</item>
+        <item>64</item>
+        <item>128</item>
+        <item>256</item>
+        <item>512</item>
+        <item>1024</item>
+    </string-array>
+    <string-array name="video_bitrateStrings">
+        <item>Auto</item>
+        <item>64 kB/s</item>
+        <item>128 kB/s</item>
+        <item>256 kB/s</item>
+        <item>512 kB/s</item>
+        <item>1 MB/s</item>
+    </string-array>
+    <string translatable="false" name="video_bitrate_default">0</string>
+
+    <string-array name="video_resolutionStrings">
+        <item>480p SD</item>
+        <item>720p HD</item>
+        <item>1080p Full HD</item>
+        <item>1440p Quad HD</item>
+        <item>4K Ultra HD</item>
+    </string-array>
+    <string-array name="video_resolutions">
+        <item>480</item>
+        <item>720</item>
+        <item>1080</item>
+        <item>1440</item>
+        <item>2160</item>
+    </string-array>
+
+    <string-array name="conversation_emojis">
+        <item>@string/default_emoji_1</item>
+        <item>@string/default_emoji_2</item>
+        <item>@string/default_emoji_3</item>
+        <item>@string/default_emoji_4</item>
+        <item>@string/default_emoji_5</item>
+        <item>@string/default_emoji_6</item>
+        <item>@string/default_emoji_7</item>
+        <item>@string/default_emoji_8</item>
+        <item>@string/default_emoji_9</item>
+    </string-array>
+
+    <string translatable="false" name="video_resolution_default">480</string>
+    <string translatable="false" name="video_resolution_default_tv">720</string>
+</resources>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
+<resources>
+
+    <dimen name="padding_xsmall">2dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+
+    <dimen name="list_medium_icon_size">40dp</dimen>
+    <dimen name="list_small_icon_size">32dp</dimen>
+
+    <dimen name="contact_bubble_top_padding">16dp</dimen>
+    <dimen name="contact_bubble_bottom_margin">48dp</dimen>
+
+    <dimen name="conversation_message_input_radius">24dp</dimen>
+    <dimen name="conversation_message_input_margin">16dp</dimen>
+    <dimen name="conversation_avatar_size">32dp</dimen>
+    <dimen name="conversation_avatar_size_small">16dp</dimen>
+    <dimen name="conversation_message_radius">10dp</dimen>
+    <dimen name="conversation_message_minor_radius">3dp</dimen>
+    <dimen name="conversation_timestamp_textsize">12sp</dimen>
+    <dimen name="conversation_status_icon_size">14dp</dimen>
+    <dimen name="conversation_menu_item_height">40dp</dimen>
+    <dimen name="conversation_file_preview">56dp</dimen>
+
+    <dimen name="location_sharing_avatar_size">36dp</dimen>
+    <dimen name="location_sharing_minmap_width">260dp</dimen>
+    <dimen name="location_sharing_minmap_height">160dp</dimen>
+    <dimen name="location_sharing_minmap_margin">16dp</dimen>
+
+    <dimen name="activity_horizontal_margin">32dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="action_button_lpadding">16dp</dimen>
+    <dimen name="action_button_bpadding">-20dp</dimen>
+
+    <dimen name="default_image_card_width">110dp</dimen>
+    <dimen name="default_image_card_height">100dp</dimen>
+
+    <dimen name="search_image_card_width">100dp</dimen>
+    <dimen name="search_image_card_height">90dp</dimen>
+
+    <dimen name="share_preview_height">120dp</dimen>
+    <dimen name="app_bar_height">260dp</dimen>
+    <dimen name="fab_margin">28dp</dimen>
+    <dimen name="fab_margin_mini">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="qr_code_size">256dp</dimen>
+    <dimen name="qr_code_scanner_size">300dp</dimen>
+
+    <dimen name="tv_avatar_size">320dp</dimen>
+    <dimen name="tv_avatar_card">150dp</dimen>
+
+    <dimen name="call_preview_elevation">8dp</dimen>
+    <dimen name="call_preview_elevation_dragged">16dp</dimen>
+    <dimen name="call_preview_margin">12dp</dimen>
+    <dimen name="call_preview_margin_big">65dp</dimen>
+    <dimen name="call_preview_margin_handle">12dp</dimen>
+    <dimen name="call_participant_margin">8dp</dimen>
+    <dimen name="call_participant_corner_radius">16dp</dimen>
+    <dimen name="call_participant_avatar_size">168dp</dimen>
+
+    <!--  Buttons  -->
+    <dimen name="button_padding">16dp</dimen>
+    <dimen name="button_corner_radius">12dp</dimen>
+
+    <!--  Wizard  -->
+    <dimen name="wizard_button_width">340dp</dimen>
+    <dimen name="wizard_button_width_half">200dp</dimen>
+
+    <dimen name="wizard_button_corner_radius">@dimen/button_corner_radius</dimen>
+    <dimen name="wizard_button_text_size">12sp</dimen>
+    <dimen name="wizard_button_padding">@dimen/button_padding</dimen>
+    <dimen name="wizard_card_width">330dp</dimen>
+    <dimen name="wizard_card_height">420dp</dimen>
+    <dimen name="wizard_image_background">180dp</dimen>
+    <dimen name="wizard_card_radius">@dimen/button_corner_radius</dimen>
+    <dimen name="wizard_card_padding">22dp</dimen>
+    <dimen name="wizard_text_size">14sp</dimen>
+    <dimen name="wizard_card_button_width">250dp</dimen>
+
+
+    <!--  Account Summary  -->
+    <dimen name="title_margin">12dp</dimen>
+
+    <!--  ProgressDialog  -->
+    <dimen name="progress_dialog_padding">32dp</dimen>
+
+    <!--  Switch Button  -->
+    <dimen name="thumb_ripple_size">42dp</dimen>
+    <dimen name="thumb_solid_inset">11dp</dimen>
+    <dimen name="thumb_shadow_inset">11dp</dimen>
+    <dimen name="thumb_solid_size">20dp</dimen>
+    <dimen name="thumb_shadow_size">21dp</dimen>
+    <dimen name="thumb_shadow_offset">2dp</dimen>
+
+    <dimen name="bottom_sheet_radius">16dp</dimen>
+    <dimen name="edit_text_radius">12dp</dimen>
+    <dimen name="dialog_radius">@dimen/bottom_sheet_radius</dimen>
+
+    <!--  JamiId  -->
+    <dimen name="jami_id_small_font_size">14sp</dimen>
+    <dimen name="jami_id_regular_font_size">20sp</dimen>
+    <dimen name="jami_id_edit_text_drawable_size">24dp</dimen>
+
+    <!--  WelcomeJami  -->
+    <dimen name="welcome_jami_logo_default_size">60dp</dimen>
+
+    <!--  ChatView  -->
+    <dimen name="image_maximum_size">200dp</dimen>
+    <dimen name="padding_call_vertical">4dp</dimen>
+    <dimen name="text_message_padding">10dp</dimen>
+    <dimen name="message_details_margin">18dp</dimen>
+    <dimen name="message_display_name_textsize">12sp</dimen>
+    <dimen name="conversation_me_margin_end">24dp</dimen>
+    <dimen name="button_size">48dp</dimen>
+    <dimen name="margin_with_avatar">52dp</dimen>
+    <dimen name="base_left_conversation_margin">16dp</dimen>
+    <dimen name="conditional_left_conversation_margin">12dp</dimen>
+    <dimen name="file_background_radius">5dp</dimen>
+    <dimen name="file_background_padding">10dp</dimen>
+    <dimen name="file_size">12sp</dimen>
+    <dimen name="file_name">16sp</dimen>
+    <dimen name="conversation_message_separation">15dp</dimen>
+    <dimen name="conversation_date_padding">15dp</dimen>
+    <dimen name="reaction_chip_background_radius">5dp</dimen>
+    <dimen name="message_reaction_stroke">2dp</dimen>
+    <dimen name="conversation_text_size_small">12sp</dimen>
+    <dimen name="conversation_reply_overlap">-6.5dp</dimen>
+
+    <!--Text size-->
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_medium">15sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_xlarge">18sp</dimen>
+
+    <!--  Custom Message Bubble  -->
+    <dimen name="custom_message_bubble_info_text_size">12sp</dimen>
+    <dimen name="custom_message_bubble_info_left_padding">8dp</dimen>
+    <dimen name="custom_message_bubble_edited_drawable_padding">2dp</dimen>
+    <dimen name="custom_message_bubble_default_text_size">14sp</dimen>
+    <dimen name="custom_message_bubble_emoji_only_text_size">32sp</dimen>
+
+    <!--  Account List  -->
+    <dimen name="account_unread_radius">10dp</dimen>
+
+    <!--  Account Details  -->
+    <dimen name="account_details_group_margin">8dp</dimen>
+</resources>

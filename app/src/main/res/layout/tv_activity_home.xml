@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="-1"/>
+
+    <View
+        android:id="@+id/fade"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tv_transparent"/>
+
+    <fragment
+        android:id="@+id/main_browse_fragment"
+        android:name="com.avatok.comms.tv.main.MainFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.avatok.comms.tv.main.HomeActivity"
+        tools:deviceIds="tv"
+        tools:ignore="MergeRootFrame" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</FrameLayout>

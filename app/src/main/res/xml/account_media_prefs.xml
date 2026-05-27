@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.                                 
+                                                                    
+This program is distributed in the hope that it will be useful,     
+but WITHOUT ANY WARRANTY; without even the implied warranty of      
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.                        
+                                                                    
+You should have received a copy of the GNU General Public License   
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/account_ringtone_label">
+
+        <Preference
+            android:key="ringtone"
+            android:summary="@string/account_ringtone_summary"
+            android:title="@string/account_ringtone_title"
+            android:icon="@drawable/baseline_notifications_active_24"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/account_audio_label">
+        <com.avatok.comms.fragments.CodecPreference
+            android:key="Account.audioCodecs"
+            android:layout="@layout/frag_audio_mgmt"
+            android:persistent="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/account_video_label">
+        <SwitchPreferenceCompat
+            android:key="Account.videoEnabled"
+            android:persistent="false"
+            android:title="@string/account_video_enable"
+            android:icon="@drawable/baseline_videocam_24"/>
+        <com.avatok.comms.fragments.CodecPreference
+            android:dependency="Account.videoEnabled"
+            android:key="Account.videoCodecs"
+            android:layout="@layout/frag_audio_mgmt"
+            android:persistent="false" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

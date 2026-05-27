@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical|start"
+    android:minHeight="42dp"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/extension_item_icon"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_weight="0"
+        android:backgroundTint="@color/transparent"
+        android:contentDescription="@string/contact_picture_description"
+        android:enabled="false"
+        android:tintMode="multiply"
+        app:maxImageSize="72dp"
+        app:useCompatPadding="true"
+        tools:src="@tools:sample/avatars"/>
+
+    <TextView
+        android:id="@+id/extension_item_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_large"
+        android:layout_weight="1"
+        android:elevation="4dp"
+        android:ellipsize="middle"
+        android:padding="8dp"
+        android:scrollHorizontally="false"
+        android:singleLine="true"
+        android:textIsSelectable="false"
+        android:textSize="16sp"
+        tools:text="@tools:sample/full_names" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/extension_item_enable_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

@@ -1,0 +1,524 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Main Day/Night base theme -->
+    <style name="AppThemeBase" parent="@style/Theme.Material3Expressive.DayNight.NoActionBar">
+        <item name="colorSurface">@color/background</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <!-- most of the icons color-->
+        <item name="colorControlNormal">@color/icon_color</item>
+        <!-- the rest of the icons color but also strings :
+        Qr code, start swarm and search bar smartlist text-->
+        <!--<item name="colorOnSurfaceVariant">@color/yellow_A100</item>-->
+        <!-- write a message hint text color-->
+        <!--<item name="android:textColorHint"></item>-->
+        <!-- titles in settings, profile string in settings and menu conversation send files-->
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <!-- write a message text color-->
+        <item name="android:editTextColor">@color/colorOnSurface</item>
+        <!--swarm id in detail contact of a conversation and subtitles in settings-->
+        <item name="android:textColorSecondary">@color/colorOnSecondaryContainer</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorSecondary</item>
+        <item name="colorOnPrimary">@color/background</item>
+
+        <item name="colorPrimaryContainer">@color/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/background</item>
+
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+
+        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnSecondaryContainer</item>
+
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/colorPrimary</item>
+
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">@color/colorOnError</item>
+
+        <item name="colorPrimaryDark">@color/background</item>
+
+        <item name="alertDialogTheme">@style/RoundedMaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/RoundedMaterialAlertDialog</item>
+        <item name="extendedFloatingActionButtonStyle">@style/Widget.AppTheme.MainActionButton</item>
+        <item name="materialSearchBarStyle">@style/Widget.Material3Expressive.SearchBar.CenteredText</item>
+
+        <item name="preferenceTheme">@style/JamiPreferenceThemeOverlay</item>
+        <item name="popupMenuBackground">@drawable/custom_popup_background</item>
+        <item name="materialSwitchStyle">@style/CustomMaterialSwitch</item>
+
+        <item name="textInputOutlinedStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>
+        <item name="textInputFilledStyle">@style/Widget.Jami.TextInputLayout</item>
+
+    </style>
+
+    <style name="JamiPreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">
+            @style/AppThemeBase.Preference.SwitchPreferenceCompat
+        </item>
+        <item name="checkBoxPreferenceStyle">
+            @style/AppThemeBase.Preference.CheckboxPreferenceCompat
+        </item>
+        <item name="seekBarPreferenceStyle">@style/AppThemeBase.Preference.SliderCompat</item>
+    </style>
+
+    <style name="AppThemeBase.Preference.SwitchPreferenceCompat" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_material_switch</item>
+    </style>
+
+    <style name="AppThemeBase.Preference.CheckboxPreferenceCompat" parent="Preference.CheckBoxPreference.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_material_checkbox</item>
+    </style>
+
+    <style name="AppThemeBase.Preference.SliderCompat" parent="Preference.SeekBarPreference.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_material_slider</item>
+    </style>
+
+    <!-- Main dark base theme -->
+    <style name="AppThemeBase.Dark" parent="@style/Theme.Material3Expressive.Dark.NoActionBar">
+        <item name="android:colorBackground">@color/black</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorSecondary">@color/color_primary_light</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/background</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <!-- Main light base theme -->
+    <style name="AppThemeBase.Light" parent="@style/Theme.Material3Expressive.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_primary_dark</item>
+        <item name="colorSecondary">@color/color_primary_light</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+    </style>
+
+    <!-- Light themes for older APIs -->
+    <style name="AppTheme" parent="AppThemeBase">
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+
+    <!-- Dark toolbar base theme -->
+    <style name="AppThemeBase.DarkToolbar" parent="AppThemeBase">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="InvitationCardTheme" parent="Widget.Material3.CardView.Elevated">
+        <item name="android:theme">@style/InvitationCardThemeOverlay</item>
+    </style>
+
+    <style name="InvitationCardThemeOverlay" parent="@style/Theme.Material3Expressive.Dark">
+
+        <item name="colorPrimary">@color/color_secondary</item>
+        <item name="android:colorBackground">@color/invitation_card_background_color</item>
+        <item name="colorSecondary">@color/invitation_card_badge_color</item>
+        <item name="colorSurface">@color/color_primary_dark</item>
+        <item name="colorContainer">@color/color_secondary</item>
+        <item name="colorOnPrimary">@color/invitation_card_text_color</item>
+        <item name="colorOnSurface">@color/invitation_card_on_surface_text_color</item>
+    </style>
+
+    <!-- Dialog -->
+    <style name="AppTheme.Dialog" parent="AppThemeBase">
+        <item name="android:windowBackground">#88000000</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!-- DarkToolBar style -->
+    <style name="AppTheme.DarkToolbar" parent="AppThemeBase.DarkToolbar" />
+
+    <!-- HomeScreen style -->
+    <style name="AppTheme.Navigation" parent="AppThemeBase">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <!-- Call Base theme -->
+    <style name="AppTheme.Call.Base" parent="AppThemeBase.Dark">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+    </style>
+
+    <style name="AppTheme.MediaViewer" parent="AppThemeBase.Dark">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+    </style>
+
+    <!-- Call theme -->
+    <style name="AppTheme.Call" parent="AppTheme.Call.Base" />
+
+    <!-- Conversation theme -->
+    <style name="AppThemeBase.Fullscreen" parent="AppThemeBase">
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <!-- Fullscreen style -->
+    <style name="AppTheme.Fullscreen" parent="AppThemeBase.Fullscreen">
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- Transparent toolbar theme -->
+    <style name="ActionBar.Transparent" parent="@android:style/Widget.DeviceDefault.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/transparent_dark_grey</item>
+        <item name="android:height">@dimen/abc_action_bar_default_height_material</item>
+        <item name="background">@color/transparent_dark_grey</item>
+    </style>
+
+    <!-- Main action button -->
+    <style name="Widget.AppTheme.MainActionButton" parent="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.FloatingActionButton.Primary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppTheme.MainActionButton</item>
+        <item name="android:fontFamily">@font/ubuntu_regular</item>
+        <!--        <item name="android:textStyle">normal</item>-->
+        <!--        <item name="iconPadding">8dp</item>-->
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="InvitationCardToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/invitation_card_text_color</item>
+        <item name="android:fontFamily">@font/ubuntu_regular</item>
+    </style>
+
+    <style name="TextAppearance.AppTheme.MainActionButton" parent="TextAppearance.Material3.LabelLarge">
+    </style>
+
+    <style name="MenuHeader" parent="AppThemeBase.Dark" />
+
+    <style name="Subheader">
+        <item name="android:textSize">14sp</item>
+        <item name="android:typeface">normal</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
+    </style>
+
+    <style name="SettingsHeader">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/settings_submenu_header</item>
+    </style>
+
+    <style name="ListPrimary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:typeface">normal</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="ListSecondary">
+        <item name="android:textSize">12sp</item>
+        <item name="android:typeface">normal</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
+    </style>
+
+    <style name="CustomRelativeLayout">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:background">@drawable/rounded_background</item>
+    </style>
+
+    <!-- Buttons styles -->
+    <style name="ButtonColoredInverse" parent="Widget.Material3Expressive.Button">
+        <item name="colorButtonNormal">@color/color_primary_light</item>
+        <item name="android:textColor">@color/text_color_primary_dark</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+    </style>
+
+    <style name="ButtonColored" parent="Widget.Material3Expressive.Button">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:paddingTop">@dimen/button_padding</item>
+        <item name="android:paddingBottom">@dimen/button_padding</item>
+        <!--<item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppTheme.MainActionButton</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>-->
+    </style>
+
+    <style name="ButtonOutLined" parent="Widget.Material3Expressive.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:paddingTop">@dimen/button_padding</item>
+        <item name="android:paddingBottom">@dimen/button_padding</item>
+        <!--<item name="android:textAppearance">@style/TextAppearance.AppTheme.MainActionButton</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>-->
+    </style>
+
+
+    <style name="TextButton" parent="Widget.Material3Expressive.Button.TextButton">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:paddingTop">@dimen/button_padding</item>
+        <item name="android:paddingBottom">@dimen/button_padding</item>
+        <!--<item name="android:textAppearance">@style/TextAppearance.AppTheme.MainActionButton</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>-->
+    </style>
+
+    <style name="WizardButton" parent="ButtonColored">
+        <!--<item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/wizard_button_padding</item>
+        <item name="android:backgroundTint">@drawable/wizard_button_background_selector</item>-->
+    </style>
+
+    <style name="CustomMaterialSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbTint">@color/material_switch_thumb_tint</item>
+        <item name="trackTint">@color/material_switch_track_tint</item>
+    </style>
+
+    <!-- AndroidTV Style -->
+    <style name="Theme.Ring.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep" />
+
+    <style name="Theme.Ring.Leanback.GuidedStep.First" />
+
+    <style name="Theme.Ring.LeanbackBrowse" parent="Theme.Leanback.Browse">
+        <item name="defaultSearchColor">@color/tv_search_background</item>
+        <item name="searchOrbViewStyle">@style/CustomSearchOrbView</item>
+    </style>
+
+    <style name="Theme.Jami.Leanback.Main" parent="Theme.Ring.LeanbackBrowse">
+        <item name="browseTitleViewLayout">@layout/titleview</item>
+    </style>
+
+    <style name="Theme.Ring.Leanback" parent="Theme.Leanback">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="searchOrbViewStyle">@style/CustomSearchOrbView</item>
+    </style>
+
+    <style name="CustomSearchOrbView" parent="Widget.Leanback.SearchOrbViewStyle">
+        <item name="searchOrbIcon">@drawable/baseline_search_24</item>
+    </style>
+
+    <!-- A default card style. Used in cards example. -->
+    <style name="DefaultCardImageStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
+        <item name="android:layout_width">@dimen/default_image_card_width</item>
+        <item name="android:layout_height">@dimen/default_image_card_height</item>
+    </style>
+
+    <style name="DefaultCardStyle" parent="Widget.Leanback.ImageCardViewStyle">
+        <item name="cardBackground">@null</item>
+    </style>
+
+    <style name="DefaultCardTheme" parent="Theme.Leanback">
+        <item name="imageCardViewStyle">@style/DefaultCardStyle</item>
+        <item name="imageCardViewImageStyle">@style/DefaultCardImageStyle</item>
+    </style>
+
+    <!-- Icon card style with custom focus handler. Used in cards example. -->
+    <style name="IconCardViewStyle" parent="DefaultCardStyle">
+        <item name="lbImageCardViewType">Title</item>
+    </style>
+
+    <style name="ContactTitleViewStyle" parent="DefaultCardStyle">
+        <item name="lbImageCardViewType">Title</item>
+    </style>
+
+    <style name="ContactTitleViewOnlineStyle" parent="DefaultCardStyle">
+        <item name="lbImageCardViewType">Title|Content|IconOnRight</item>
+    </style>
+
+    <style name="ContactCompleteCardViewStyle" parent="DefaultCardStyle">
+        <item name="lbImageCardViewType">Title|Content</item>
+    </style>
+
+    <style name="IconCardImageStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:layout_height">96dp</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="IconCardInfoAreaStyle" parent="Widget.Leanback.ImageCardView.InfoAreaStyle">
+        <item name="android:layout_width">96dp</item>
+        <item name="layout_viewType">main</item>
+    </style>
+
+    <!-- A Search card style. Used in cards example. -->
+    <style name="SearchCardImageStyle" parent="Widget.Leanback.ImageCardView.ImageStyle">
+        <item name="android:layout_width">@dimen/search_image_card_width</item>
+        <item name="android:layout_height">@dimen/search_image_card_height</item>
+    </style>
+
+    <style name="ContactCardTheme" parent="DefaultCardTheme">
+        <item name="imageCardViewStyle">@style/ContactTitleViewStyle</item>
+    </style>
+
+    <style name="ContactCompleteCardTheme" parent="DefaultCardTheme">
+        <item name="imageCardViewStyle">@style/ContactCompleteCardViewStyle</item>
+    </style>
+
+    <!-- Theme corresponding to the IconCardStyle -->
+    <style name="IconCardTheme" parent="Theme.Leanback">
+        <item name="imageCardViewStyle">@style/IconCardViewStyle</item>
+        <item name="imageCardViewImageStyle">@style/IconCardImageStyle</item>
+        <item name="imageCardViewInfoAreaStyle">@style/IconCardInfoAreaStyle</item>
+    </style>
+
+    <style name="Widget.Leanback.ImageCardView.BadgeStyle">
+        <item name="android:id">@id/extra_badge</item>
+        <item name="android:layout_width">@dimen/lb_basic_card_info_badge_size</item>
+        <item name="android:layout_height">@dimen/lb_basic_card_info_badge_size</item>
+        <item name="android:contentDescription">@null</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="OnlineBadgeStyle" parent="Widget.Leanback.ImageCardView.BadgeStyle">
+        <item name="android:src">@drawable/ic_tv_online_indicator</item>
+    </style>
+
+    <style name="ContactCardOnlineTheme" parent="ContactCardTheme">
+        <item name="imageCardViewBadgeStyle">@style/OnlineBadgeStyle</item>
+        <item name="imageCardViewStyle">@style/ContactCompleteCardViewStyle</item>
+    </style>
+
+    <style name="ContactCompleteCardOnlineTheme" parent="ContactCompleteCardTheme">
+        <item name="imageCardViewStyle">@style/ContactTitleViewOnlineStyle</item>
+        <item name="imageCardViewBadgeStyle">@style/OnlineBadgeStyle</item>
+    </style>
+
+    <style name="LeanbackPreferences" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlayLeanback</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="AppTheme" />
+
+    <!--For the messages-->
+    <style name="OutgoingTextMesssage">
+        <item name="colorControlActivated">@color/conversation_primary_selection_handles</item>
+        <item name="android:textColorLink">@color/text_color_primary_dark</item>
+        <item name="android:textColor">@color/text_color_primary_dark</item>
+    </style>
+    <style name="IncomingTextMessage">
+        <item name="android:textColorLink">@color/colorOnSurface</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+
+    <style name="Widget.Jami.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@color/edit_text_background</item>
+        <item name="boxCornerRadiusTopStart">@dimen/edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/edit_text_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/edit_text_radius</item>
+    </style>
+
+    <style name="RoundedMaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Dialog.Rounded</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textSize">16sp</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyle</item>
+    </style>
+    <style name="BiometricMaterialAlertDialog" parent="RoundedMaterialAlertDialog">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorSecondary">@color/primary_text_default_material_dark</item>
+        <item name="colorSurface">@color/black</item>
+        <item name="colorOnSurface">@color/primary_text_default_material_dark</item>
+        <item name="colorOnSurfaceVariant">@color/secondary_text_default_material_dark</item>
+        <item name="android:textColor">@color/color_primary_light_translucent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/BiometricMaterialAlertDialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/BiometricMaterialAlertDialog</item>
+        <item name="colorSurfaceContainerHigh">@color/black</item>
+    </style>
+
+    <style name="BiometricMaterialAlertDialog.Button" parent="MaterialAlertDialog.Material3.Title.Text" />
+
+    <style name="ShapeAppearanceOverlay.Dialog.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/dialog_radius</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="TitleTextStyle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Style for the title view in a GuidanceStylist's default layout. -->
+    <style name="Widget.Leanback.GuidanceTitleStyle">
+        <item name="android:layout_toEndOf">@id/guidance_icon</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignWithParentIfMissing">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ubuntu_light</item>
+        <item name="android:gravity">start</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <!-- Style for the description view in a GuidanceStylist's default layout. -->
+    <style name="Widget.Leanback.GuidanceDescriptionStyle">
+        <item name="android:layout_below">@id/guidance_title</item>
+        <item name="android:layout_toEndOf">@id/guidance_icon</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignWithParentIfMissing">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="android:gravity">start</item>
+        <item name="android:maxLines">6</item>
+        <item name="android:textColor">#88F1F1F1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+    </style>
+
+    <!-- Style for an action's title in a GuidedActionsStylist's default item layout. -->
+    <style name="Widget.Leanback.GuidedActionItemTitleStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:alpha">1.00</item>
+        <item name="android:fontFamily">@font/ubuntu_medium</item>
+        <item name="android:maxLines">@integer/lb_guidedactions_item_title_min_lines</item>
+        <item name="android:textColor">@color/lb_guidedactions_item_unselected_text_color</item>
+        <item name="android:textSize">@dimen/lb_guidedactions_item_title_font_size</item>
+    </style>
+
+    <!-- Style for an action's description in a GuidedActionsStylist's default item layout. -->
+    <style name="Widget.Leanback.GuidedActionItemDescriptionStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:alpha">0.50</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="android:maxLines">@integer/lb_guidedactions_item_description_min_lines</item>
+        <item name="android:textColor">@color/lb_guidedactions_item_unselected_text_color</item>
+        <item name="android:textSize">@dimen/lb_guidedactions_item_description_font_size</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="LightThemeSelector" parent="android:Theme.Light">
+        <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="CustomToolbarTitle">
+        <item name="android:ellipsize">@color/colorOnSurface</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>

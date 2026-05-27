@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/callLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/tv_contact_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/padding_xsmall"
+    tools:gravity="end">
+
+    <LinearLayout
+        android:id="@+id/callInfoLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/textmsg_bg_out"
+        android:paddingHorizontal="@dimen/text_message_padding"
+        android:paddingVertical="@dimen/padding_call_vertical">
+
+        <ImageView
+            android:id="@+id/call_icon"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:contentDescription="@null"
+            tools:srcCompat="@drawable/baseline_outgoing_call_16"
+            tools:tint="@color/call_drawable_color" />
+
+        <TextView
+            android:id="@+id/call_hist_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="@color/call_text_outgoing_message"
+            android:textSize="13sp"
+            tools:text="Outgoing call" />
+
+        <TextView
+            android:id="@+id/call_details_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorOnSurface"
+            android:textSize="13sp"
+            tools:text="- Lasted 17:26"
+            tools:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/msg_details_txt_perm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="@dimen/padding_small"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="@string/time_just_now"
+        tools:visibility="visible" />
+
+</LinearLayout>

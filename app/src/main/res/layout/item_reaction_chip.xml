@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Wrapping item into linear layout is not the cleanest way to create padding between items. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip"
+        style="@style/Widget.Material3.Chip.Filter.Elevated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:paddingVertical="4dp"
+        android:textSize="30dp"
+        app:checkedIconEnabled="false"
+        app:chipBackgroundColor="@color/selector_checked_state_color"
+        app:chipMinTouchTargetSize="0dp"
+        app:chipStartPadding="0dp"
+        app:chipEndPadding="0dp"
+        app:textStartPadding="4dp"
+        app:textEndPadding="4dp"
+        tools:checked="true"
+        tools:text="🥰"
+        tools:ignore="SpUsage" />
+
+</LinearLayout>

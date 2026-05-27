@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BoundedScrollView">
+        <attr name="bounded_width" format="dimension" />
+        <attr name="bounded_height" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="QrView">
+        <attr name="foregroundColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="text" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AvatarView">
+        <attr name="uri" format="string" />
+        <attr name="username" format="string" />
+        <attr name="displayName" format="string" />
+        <attr name="avatar" format="reference" />
+        <attr name="cropCircle" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SwitchButton">
+        <attr name="backColor" format="color|reference"/>
+        <attr name="status" format="string"/>
+    </declare-styleable>
+
+    <bool name="isTablet">false</bool>
+
+    <declare-styleable name="VideoSinkView">
+        <attr name="ratioWidth" format="dimension"/>
+        <attr name="ratioHeight" format="dimension"/>
+        <attr name="fitToContent" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="AutoFitTextureView">
+        <attr name="isFullscreen" format="boolean"/>
+    </declare-styleable>
+
+</resources>

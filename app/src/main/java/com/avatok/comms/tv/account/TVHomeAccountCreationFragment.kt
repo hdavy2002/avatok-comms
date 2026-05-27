@@ -1,0 +1,178 @@
+/*
+ *  Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+package com.avatok.comms.tv.account
+
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.activityViewModels
+import androidx.leanback.widget.GuidanceStylist.Guidance
+import androidx.leanback.widget.GuidedAction
+import com.avatok.comms.R
+import com.avatok.comms.account.AccountCreationViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.snackbar.Snackbar
+import com.avatok.comms.account.HomeAccountCreationFragment
+import com.avatok.comms.utils.AndroidFileUtils.getCacheFile
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import net.jami.account.HomeAccountCreationPresenter
+import net.jami.account.HomeAccountCreationView
+import java.io.File
+
+@AndroidEntryPoint
+class TVHomeAccountCreationFragment : JamiGuidedStepFragment<HomeAccountCreationPresenter, HomeAccountCreationView>(),
+    HomeAccountCreationView {
+    private val model: AccountCreationViewModel by activityViewModels()
+    private val mCompositeDisposable = CompositeDisposable()
+    private var hasAutoOpenedBackupFlow = false
+
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                finish()
+            }
+        }
+
+    private val selectFile =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            Log.w(TAG, "Selected file: $uri")
+            if (uri == null) {
+                return@registerForActivityResult
+            }
+            getCacheFile(requireContext(), uri)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ file: File ->
+                    model.model.archive = file
+                    Log.w(TAG, "Loaded file: $file")
+                    presenter.clickOnBackupAccountLink()
+                }) { e: Throwable ->
+                    Log.e(TAG, "Error importing archive", e)
+                    view?.let { view ->
+                        Snackbar.make(
+                            view,
+                            getString(R.string.import_archive_error),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }.let { mCompositeDisposable.add(it) }
+        }
+
+    private fun finish(){
+        activity?.finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (hasAutoOpenedBackupFlow) return
+
+        val a = requireActivity()
+        val i = a.intent ?: return
+
+        val shouldOpen = i.getBooleanExtra(
+            TVImportArchiveReceiverActivity.EXTRA_AUTO_OPEN_BACKUP_FLOW,
+            false
+        )
+        if (!shouldOpen) return
+
+        val path = i.getStringExtra(TVImportArchiveReceiverActivity.EXTRA_ARCHIVE_PATH)
+        if (model.model.archive == null && !path.isNullOrBlank()) {
+            model.model.archive = File(path)
+        }
+
+        val archive = model.model.archive
+        if (archive != null && archive.exists()) {
+            i.removeExtra(TVImportArchiveReceiverActivity.EXTRA_AUTO_OPEN_BACKUP_FLOW)
+            i.removeExtra(TVImportArchiveReceiverActivity.EXTRA_ARCHIVE_PATH)
+            hasAutoOpenedBackupFlow = true
+            presenter.clickOnBackupAccountLink()
+        }
+    }
+
+    override fun goToAccountCreation() {
+        add(parentFragmentManager, TVJamiAccountCreationFragment())
+    }
+
+    override fun goToAccountLink() {
+        startForResult.launch(Intent(requireContext(), TVImportWizard::class.java))
+    }
+
+    override fun goToAccountConnect() {
+        add(parentFragmentManager, TVJamiAccountConnectFragment())
+    }
+
+    override fun goToBackupAccountLink() {
+        Log.w(TAG, "goToBackupAccountLink")
+        add(parentFragmentManager, TVJamiLinkAccountFragment())
+    }
+
+    override fun goToSIPAccountCreation() {
+        //TODO
+    }
+
+    override fun onProvideTheme(): Int = R.style.Theme_Ring_Leanback_GuidedStep_First
+
+    override fun onCreateGuidance(savedInstanceState: Bundle?): Guidance {
+        val title = getString(R.string.account_creation_home)
+        val breadcrumb = ""
+        val description = getString(R.string.help_ring)
+        val icon = requireContext().getDrawable(R.drawable.ic_jami)
+        return Guidance(title, description, breadcrumb, icon)
+    }
+
+    override fun onCreateActions(actions: MutableList<GuidedAction>, savedInstanceState: Bundle?) {
+        val context = requireContext()
+        addAction(context, actions, CREATE_ACCOUNT, getString(R.string.account_create_title), "", true)
+        addAction(context, actions, LINK_ACCOUNT, getString(R.string.account_link_device), "", true)
+        addAction(context, actions, LINK_BACKUP_ACCOUNT, getString(R.string.account_link_archive_button), "", true)
+        addAction(context, actions, CREATE_JAMS_ACCOUNT, getString(R.string.account_connect_server_button), "", true)
+    }
+
+    override fun onGuidedActionClicked(action: GuidedAction) {
+        when (action.id) {
+            LINK_ACCOUNT -> presenter.clickOnLinkAccount()
+            LINK_BACKUP_ACCOUNT -> try {
+                selectFile.launch(arrayOf("*/*"))
+            } catch (e: ActivityNotFoundException) {
+                Log.e(TAG, "Error selecting file", e)
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.import_archive_error),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+            CREATE_ACCOUNT -> presenter.clickOnCreateAccount()
+            CREATE_JAMS_ACCOUNT -> presenter.clickOnConnectAccount()
+            else -> requireActivity().finish()
+        }
+    }
+
+    companion object {
+        private const val TAG = "TVHomeAccountCreationFragment"
+
+        private const val LINK_ACCOUNT = 0L
+        private const val LINK_BACKUP_ACCOUNT = 1L
+        private const val CREATE_ACCOUNT = 2L
+        private const val CREATE_JAMS_ACCOUNT = 3L
+
+        private const val REQUEST_CODE_IMPORT = 56
+    }
+}

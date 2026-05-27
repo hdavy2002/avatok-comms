@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".tv.conversation.TvConversationFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu_medium"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/mulish_regular"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:isScrollContainer="true"
+            android:measureAllChildren="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:nestedScrollingEnabled="true"
+                android:paddingBottom="10dp"
+                tools:listitem="@layout/item_conv_msg_peer_tv" />
+
+        </androidx.core.widget.NestedScrollView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tv_header_bg"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="300dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center_horizontal"
+                app:cardBackgroundColor="@color/conversation_primary_background"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="4dp">
+
+                <TextView
+                    android:id="@+id/conversation_action_message"
+                    tools:text="@string/invitation_message"
+                    tools:visibility="visible"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/text_color_primary_dark"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:id="@+id/ended_conversation_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/conversation_ended"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/text_color_primary_dark"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btn_switch"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/tv_button_shape"
+                        android:src="@drawable/baseline_open_in_new_24"
+                        app:tint="@color/text_color_primary_dark"
+                        android:padding="8dp"/>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btn_delete"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/tv_button_shape"
+                        android:src="@drawable/baseline_delete_24"
+                        app:tint="@color/text_color_primary_dark"
+                        android:padding="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/conversation_action_group"
+                    tools:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/text_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/button_text"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tv_button_shape"
+                            android:contentDescription="@string/tv_send_text"
+                            android:padding="@dimen/padding_small"
+                            android:src="@drawable/baseline_androidtv_chat"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/text_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/tv_send_text"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/audio_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/button_audio"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tv_button_shape"
+                            android:contentDescription="@string/tv_send_audio"
+                            android:padding="@dimen/padding_small"
+                            android:src="@drawable/baseline_androidtv_message_audio"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/text_audio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/tv_send_audio"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/video_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/button_video"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tv_button_shape"
+                            android:contentDescription="@string/tv_send_video"
+                            android:padding="@dimen/padding_small"
+                            android:src="@drawable/baseline_androidtv_message_video"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/text_video"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/tv_send_video"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

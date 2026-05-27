@@ -1,144 +1,206 @@
-// app/build.gradle.kts — AvaTok Comms Android app
-//
-// First-commit scaffold. Daemon-lifecycle wiring and identity bootstrap
-// come in commit 2. This commit just gets the Android project to a
-// state where it can compile (a stub Activity) and is wired to
-// :libjamiclient via project() dependency.
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+val buildFirebase = project.hasProperty("buildFirebase") || gradle.startParameter.taskRequests.toString().contains("Firebase")
 
 plugins {
     alias(libs.plugins.android.application)
-    // NOTE: do NOT apply org.jetbrains.kotlin.android — AGP 9+ has built-in
-    // Kotlin support and the standalone plugin is now a fatal error. Jami's
-    // own jami-android/app keeps it via two compat flags in gradle.properties
-    // (`android.builtInKotlin=true`, `android.newDsl=false`) — we don't need
-    // those because we're starting fresh on AGP 9 conventions.
-
-    // Kotlin 2.0+ moved the Compose compiler out of the standalone Kotlin
-    // plugin into its own plugin. We must apply it explicitly. Pinned to
-    // Kotlin 2.3.10 to match libs.versions.toml's kotlin version.
-    id("org.jetbrains.kotlin.plugin.compose") version "2.3.10"
-
-    // Hilt for DI of libjamiclient services (mirrors Jami's pattern).
-    // KSP runs Hilt's annotation processor (Hilt requires KSP or kapt;
-    // KSP is the modern path).
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.protobuf)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.avatok.comms"
     compileSdk = 36
+    buildToolsVersion = "36.1.0"
     ndkVersion = "29.0.14206865"
-
     defaultConfig {
-        applicationId = "com.avatok.comms"
-        minSdk = 31
+        minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
-
-        ndk {
-            abiFilters += properties["archs"]?.toString()?.split(",")
-                ?: listOf("arm64-v8a")
-            println("Building for ABIs $abiFilters")
-        }
-
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    buildTypes {
-        debug {
-            isMinifyEnabled = false
-            isDebuggable = true
-            // Don't ship full debug symbols in the APK — keeps it small
-            // while still allowing logcat-level debugging.
+        versionCode = 495
+        versionName = "20260522-01"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                version = "4.1.2"
+                arguments += listOf(
+                    "-DANDROID_STL=c++_shared",
+                    "-DBUILD_CONTRIB=ON",
+                    "-DBUILD_EXTRA_TOOLS=OFF",
+                    "-DBUILD_TESTING=OFF",
+                    "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON",
+                    "-DJAMI_JNI=ON",
+                    "-DJAMI_JNI_PACKAGEDIR="+rootProject.projectDir.resolve("libjamiclient/src/main/java"),
+                    "-DJAMI_DATADIR=/data/data/$namespace/files",
+                )
+            }
             ndk {
-                debugSymbolLevel = "SYMBOL_TABLE"
+                debugSymbolLevel = "FULL"
+                abiFilters += properties["archs"]?.toString()?.split(",") ?: listOf("arm64-v8a", "x86_64", "armeabi-v7a")
+                println ("Building for ABIs $abiFilters")
             }
         }
+    }
+    buildTypes {
+        debug {
+            isDebuggable = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
         release {
-            isMinifyEnabled = false  // Phase 6: enable R8, add proguard rules
-            // Release signing is intentionally not configured yet — we
-            // only ship debug APKs from CI until Phase 6.
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+    flavorDimensions += "push"
+    productFlavors {
+        create("noPush") {
+            dimension = "push"
+        }
+        create("withFirebase") {
+            dimension = "push"
+        }
+        create("withUnifiedPush") {
+            dimension = "push"
+        }
+    }
+    signingConfigs {
+        create("config") {
+            keyAlias = "ring"
+            storeFile = file("../keystore.bin")
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
-    // AGP 9+ built-in Kotlin uses this DSL instead of the old kotlinOptions block.
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
         }
     }
-
-    buildFeatures {
-        compose = true
-        viewBinding = false
-        buildConfig = true
-    }
-
-    packaging {
-        resources {
-            // Common conflict-resolution rules when bundling many native
-            // .so files via libjamiclient + the daemon.
-            excludes += setOf(
-                "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
-                "META-INF/NOTICE",
-                "META-INF/NOTICE.txt",
-                "META-INF/*.kotlin_module"
-            )
+    externalNativeBuild {
+        cmake {
+            path = file("../vendor/jami-client-android/daemon/CMakeLists.txt")
+            version = "4.1.2"
         }
     }
 }
 
 dependencies {
-    // The vendored Jami Kotlin service layer. THIS is the integration
-    // point that gives our app access to the engine without us writing
-    // any JNI directly.
     implementation(project(":libjamiclient"))
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.leanback)
+    implementation(libs.androidx.leanback.preference)
+    implementation(libs.androidx.car.app)
+    implementation(libs.androidx.tvprovider)
+    implementation(libs.androidx.media)
+    implementation(libs.androidx.sharetarget)
+    implementation(libs.androidx.emoji2)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.emoji2.emojipicker)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.window)
 
-    // NOTE: we use explicit Gradle coordinates (not libs.* catalog entries)
-    // for the Compose stack because Jami's vendored libs.versions.toml
-    // doesn't declare Compose aliases — Jami's UI is View-based, not
-    // Compose. When we later own our own libs.versions.toml (Phase 6 or
-    // earlier when we stop sharing Jami's catalog), we'll move these
-    // back to alias references.
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
 
-    // Standard AndroidX
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.activity:activity-compose:1.9.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation(libs.material)
+    implementation(libs.androidx.biometric)
+    implementation(libs.flexbox)
+    implementation(libs.protobuf.javalite)
+    implementation(libs.androidx.annotation.jvm)
 
-    // Compose BOM keeps the Compose libraries in lockstep
-    implementation(platform("androidx.compose:compose-bom:2024.10.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    // ORM
+    implementation(libs.ormlite.android)
 
-    // Kotlin coroutines — for collecting libjamiclient state flows when
-    // we wire the daemon in commit 3
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    // Barcode scanning
+    implementation(libs.zxing.android.embedded) { isTransitive = false }
+    implementation(libs.zxing.core)
 
-    // Hilt + RxJava — needed for the DI graph that wires libjamiclient
-    // services together. libjamiclient itself uses RxJava (BehaviorSubject /
-    // Observable), not Kotlin Flow. These versions come from Jami's
-    // vendored libs.versions.toml — keeps us on the same artefacts Jami
-    // tested against.
+    // Dagger dependency injection
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // Espresso Unit Tests
+    androidTestImplementation(libs.androidx.test.ext.junit.ktx)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.espresso.contrib)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.okhttp)
+    androidTestImplementation(libs.androidx.test.espresso.intents)
+    androidTestImplementation(libs.androidx.test.core)
+
+    // Glide
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
+    // Android SVG
+    implementation(libs.androidsvg)
+
+    // RxAndroid
+    implementation(libs.rxandroid)
+    implementation(libs.rxjava)
+
+    // OpenStreetMap
+    implementation(libs.osmdroid)
+
+    // Markwon (Markdown support)
+    implementation(libs.markwon.core)
+    implementation(libs.markwon.linkify)
+
+    implementation(libs.zoomage)
+    implementation(libs.ez.vcard) {
+        exclude(group= "org.freemarker", module= "freemarker")
+        exclude(group= "com.fasterxml.jackson.core", module= "jackson-core")
+    }
+
+    "withFirebaseImplementation"(libs.firebase.messaging) {
+        exclude(group= "com.google.firebase", module= "firebase-core")
+        exclude(group= "com.google.firebase", module= "firebase-analytics")
+        exclude(group= "com.google.firebase", module= "firebase-measurement-connector")
+    }
+    "withUnifiedPushImplementation"(libs.unifiedpush.connector)  {
+        exclude(group= "com.google.protobuf", module= "protobuf-java")
+    }
+    "withUnifiedPushImplementation"(libs.unifiedpush.connector.ui)
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${libs.versions.protoc.get()}"
+    }
+    generateProtoTasks {
+        all().configureEach {
+            builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
+if (buildFirebase) {
+    println ("apply plugin $buildFirebase")
+    apply(plugin = libs.plugins.google.services.get().pluginId)
+}
+
+// Make sure the native build runs before the Kotlin/Java build
+afterEvaluate {
+    val cmakeTasks = tasks.matching { it.name.startsWith("buildCMake") }
+    tasks.withType<KotlinCompile>().configureEach { dependsOn(cmakeTasks) }
 }

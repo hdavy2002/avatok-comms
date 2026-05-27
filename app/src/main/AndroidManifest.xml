@@ -1,59 +1,543 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+Copyright (C) 2004-2025 Savoir-faire Linux Inc.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissions our app will need over its full Phase-2-to-6 build.
-         Granular runtime grants happen in code; declaring them here is
-         the manifest contract with the OS. -->
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL"
-                     tools:ignore="ForegroundServicePermission" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"
-                     tools:ignore="ForegroundServicePermission" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA"
-                     tools:ignore="ForegroundServicePermission" />
-    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <!-- Bluetooth (Phase 4+ — for headset routing). -->
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"
+        tools:ignore="FullScreenIntentPolicy" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+        tools:ignore="ForegroundServicesPolicy" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
 
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.type.pc"
+        android:required="false" />
 
     <application
-        android:name=".AvaTokApplication"
+        android:appCategory="social"
+        android:icon="@mipmap/ic_launcher"
+        android:banner="@mipmap/ic_banner"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:hasFragileUserData="true"
+        android:resizeableActivity="true"
         android:supportsRtl="true"
-        android:allowBackup="false"
-        android:usesCleartextTraffic="false"
-        tools:targetApi="36">
+        android:enableOnBackInvokedCallback="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:localeConfig="@xml/locales_config"
+        tools:ignore="UnusedAttribute">
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".client.LogsActivity"
+            android:exported="false"
+            android:label="@string/pref_logs_title"
+            android:theme="@style/AppTheme.Navigation" />
+        <activity
+            android:name=".client.PushNotificationLogsActivity"
+            android:exported="false"
+            android:label="@string/pref_push_notifications_logs_title"
+            android:theme="@style/AppTheme.Navigation" />
+        <activity
+            android:name=".client.HomeActivity"
+            android:configChanges="screenSize|screenLayout|smallestScreenSize|orientation"
             android:exported="true"
-            android:label="@string/app_name">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Navigation"
+            android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sip" />
+                <data android:scheme="tel" />
+                <data android:scheme="ring" />
+                <data android:scheme="jami" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:host="link.jami.net"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name=".client.ShareActivity"
+            android:exported="true"
+            android:label="@string/title_share_with"
+            android:parentActivityName=".client.HomeActivity"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.chooser.chooser_target_service"
+                android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
+        </activity>
+        <activity
+            android:name=".account.AccountWizardActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:theme="@style/AppThemeBase.Light"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".account.ImportArchiveReceiverActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppThemeBase.Light">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".client.RingtoneActivity"
+            android:configChanges="screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:label="@string/account_ringtone_title"
+            android:theme="@style/Theme.Material3.DayNight.Dialog.MinWidth" />
+
+        <receiver
+            android:name=".service.OutgoingCallHandler"
+            android:permission="android.permission.PROCESS_OUTGOING_CALLS"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.BootReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.ACTION_MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".service.CallNotificationService"
+            android:description="@string/call_service_description"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall|mediaProjection|camera|microphone" />
+        <service
+            android:name=".services.DataTransferService"
+            android:description="@string/data_transfer_service_description"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".service.SyncService"
+            android:description="@string/data_transfer_service_description"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".service.LocationSharingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <activity
+            android:name=".client.CallActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:showOnLockScreen="true"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/AppTheme.Call"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="sip" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="ring.cx"
+                    android:pathPrefix="/id/"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="ring.cx"
+                    android:pathPrefix="/id/"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="ring" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+                <action android:name="android.intent.action.DIAL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/phone" />
+                <data android:mimeType="vnd.android.cursor.item/phone_v2" />
+                <data android:mimeType="vnd.android.cursor.item/person" />
+            </intent-filter>
         </activity>
 
-        <!-- Foreground service that owns the libjami daemon lifecycle.
-             Stub in Phase 3 commit 3a (compiles, starts foreground notification
-             but doesn't yet boot the daemon). Commit 3b wires libjamiclient
-             DaemonService injection + actual startDaemon() call. -->
-        <service
-            android:name=".services.JamiDaemonService"
+        <service android:name=".service.ConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true"
+            tools:targetApi="28">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".client.ConversationActivity"
+            android:allowEmbedded="true"
+            android:configChanges="screenSize|screenLayout|smallestScreenSize|orientation"
             android:exported="false"
-            android:foregroundServiceType="microphone|camera|phoneCall" />
+            android:parentActivityName=".client.HomeActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.Fullscreen"
+            android:windowSoftInputMode="adjustResize" />
+
+        <service
+            android:name=".service.DRingService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync|remoteMessaging">
+            <intent-filter>
+                <action android:name=".service.DRingService" />
+            </intent-filter>
+        </service> <!-- AndroidTV section -->
+        <activity
+            android:name=".tv.main.HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Jami.Leanback.Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.avatok.comms"
+                    android:path="/home"
+                    android:scheme="jamitv" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".tv.account.TVImportArchiveReceiverActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Leanback">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/octet-stream" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.jac" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".tv.main.ChannelActionHandler"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.media.tv.ACTION_INITIALIZE_PROGRAMS" />
+                <action android:name="android.media.tv.ACTION_PREVIEW_PROGRAM_BROWSABLE_DISABLED" />
+                <action android:name="android.media.tv.ACTION_PREVIEW_PROGRAM_ADDED_TO_WATCH_NEXT" />
+                <action android:name="android.media.tv.ACTION_WATCH_NEXT_PROGRAM_BROWSABLE_DISABLED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".tv.account.TVAccountWizard"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".tv.account.TVImportWizard"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".tv.account.TVExportWizard"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".tv.search.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Leanback" />
+        <activity
+            android:name=".tv.account.TVShareActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ring.Leanback" />
+        <activity
+            android:name=".tv.call.TVCallActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:showOnLockScreen="true"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="com.avatok.comms.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".tv.camera.CustomCameraActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="com.avatok.comms.action.CALL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".tv.contact.TVContactActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Leanback.Details">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.avatok.comms"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="jamitv" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".tv.settings.TVSettingsActivity"
+            android:exported="false"
+            android:theme="@style/LeanbackPreferences" />
+        <activity
+            android:name=".tv.contact.more.TVContactMoreActivity"
+            android:exported="false"
+            android:theme="@style/LeanbackPreferences" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.avatok.comms.file_provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".client.MediaViewerActivity"
+            android:exported="false"
+            android:label="@string/title_media_viewer"
+            android:theme="@style/AppTheme" />
+
+        <activity android:name=".client.CertificateViewerActivity"
+            android:exported="false"
+            android:label="@string/certificate"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:theme="@style/AppTheme.Navigation" />
+
+        <service
+            android:name=".service.JamiJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <activity
+            android:name=".client.ConversationDetailsActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:label="@string/conversation_details"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.Fullscreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".client.ConversationSelectionActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:label="Choose a contact or conversation"
+            android:theme="@style/Theme.Material3.DayNight.Dialog.Alert"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".client.MessageEditActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="false"
+            android:theme="@style/AppTheme.Dialog"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity android:name=".linkdevice.view.LinkDeviceExportSideActivity"
+            android:theme="@style/AppThemeBase"
+            android:exported="false"/>
+        <activity android:name=".linkdevice.view.LinkDeviceImportSideActivity"
+            android:theme="@style/AppThemeBase"
+            android:exported="false"/>
 
     </application>
+
 </manifest>

@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="pref_category_network">Xarxa</string>
+  <string name="pref_category_contacts">Contactes</string>
+  <string name="pref_category_video">Vídeo</string>
+  <string name="pref_category_system">Sistema</string>
+  <string name="pref_category_privacy">Privadesa</string>
+  <string name="pref_category_diagnostic">Diagnòstics</string>
+  <string name="pref_category_appearance">Aspecte</string>
+  <string name="pref_category_connectivity">Connectivitat</string>
+  <string name="pref_category_video_settings">Preferències de vídeo avançades</string>
+  <string name="pref_mobileData_title">Dades mòbils</string>
+  <string name="pref_mobileData_summary">Permet Jami en xarxes 3G/LTE a més de Wi-Fi</string>
+  <string name="pref_pushNotifications_title">Notificacions Push</string>
+  <string name="pref_pushNotifications_summary">Utilitza els servidors de Google per permetre rebre trucades/missatges en rerefons.</string>
+  <string name="pref_unifiedPush_summary">Utilitzar un servei UnifiedPush per permetre rebre trucades/messatges en fons</string>
+  <string name="pref_video_advanced_title">Preferències de vídeo avançades</string>
+  <string name="pref_video_advanced_summary">Canvia el bitrate de vídeo, resolució així com l\'accés a característiques experimentals</string>
+  <string name="pref_hd_summary">Habilita vídeo en HD</string>
+  <string name="pref_hwEncode_title">Habilita l\'acceleració de codificació</string>
+  <string name="pref_hwEncode_summary">Característica experimental</string>
+  <string name="pref_videoBitrate_title">Vídeo bitrate</string>
+  <string name="pref_videoBitrate_summary">Seleccioneu el bitrate vídeo per defecte (KB/s)</string>
+  <string name="pref_videoResolution_title">Resolució de vídeo</string>
+  <string name="pref_videoResolution_summary">Seleccioneu la resolució de vídeo per defecte</string>
+  <string name="pref_systemContacts_title">Usa contactes del sistema</string>
+  <string name="pref_systemContacts_summary">Usa contactes del sistema per mostrar detalls del que truca</string>
+  <string name="pref_systemDialer_title">Fer trucades del sistema amb Jami</string>
+  <string name="pref_systemDialer_summary">Utilitza Jami per fer trucades del sistema quan sigui possible</string>
+  <string name="pref_startOnBoot_title">Arrenca Jami a l\'inici</string>
+  <string name="pref_startOnBoot_summary">Executa Jami en segon pla quan el sistema s\'inicia.</string>
+  <string name="pref_clearHistory_title">Neteja historial</string>
+  <string name="pref_notification_title">Notificació de visibilitat</string>
+  <string name="pref_notification_summary">Estableix la visibilitat de les notificacions de l\'aplicació a la pantalla de bloqueig.</string>
+  <string name="pref_blackList_title">Llista de bloqueig</string>
+  <string name="pref_blackList_summary">Comprova la llista de bloqueig</string>
+  <string name="pref_delete_account_title">Esborrar compte</string>
+  <string name="pref_newGroup_title">Habilita el xat de grup</string>
+  <string name="pref_newGroup_summary">Habilitar la creació de grups a Jami</string>
+  <string name="pref_logs_title">Traces de diagnostic</string>
+  <string name="pref_logs_summary">Obre les opcions de diagnòstic</string>
+  <string name="pref_logs_start">Inicia les traces</string>
+  <string name="pref_logs_stop">Atura les traces</string>
+  <string name="pref_typing_title">Indicador de mecanització</string>
+  <string name="pref_block_record_title">Bloqueja captures de pantalla i gravació</string>
+  <string name="pref_block_record_summary">Bloqueja captures o gravació de pantalla</string>
+  <string name="pref_link_preview_title">Visualitzacions prèvies d\'enllaços web</string>
+  <string name="pref_link_preview_summary">La visualització prealable requereix descarregar contingut des de servidors de tercers.</string>
+  <!--Notifications Visibility-->
+  <string name="connectivity_custom_title">Personalitzat</string>
+  <!--Extension-->
+  <string name="extension_invalid_signature"><b>%1$s</b> té una firma invàlida</string>
+</resources>

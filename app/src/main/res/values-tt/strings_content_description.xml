@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Strings for xml content description of images-->
+  <string name="dial_numeric_pad">Санлы диалог</string>
+  <string name="contact_unblock">Блокны ачыгыз</string>
+</resources>

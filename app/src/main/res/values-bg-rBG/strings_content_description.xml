@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Strings for xml content description of images-->
+  <string name="dial_numeric_pad">Цифрова клавиатура</string>
+  <string name="contact_unblock">Отблокиране</string>
+  <string name="file_download_button">Скачане</string>
+  <string name="control_play">Пускане</string>
+  <string name="control_replay">Повторение</string>
+  <string name="control_pause">Пауза</string>
+</resources>

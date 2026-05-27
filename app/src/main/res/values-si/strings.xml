@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--About-->
+  <string name="version_section">අනුවාදය</string>
+  <!--About dialog-->
+  <!--RingActivity-->
+  <!--AB menus-->
+  <!--Sections-->
+  <string name="menu_item_settings">සැකසුම්</string>
+  <!--Dialing Fragment-->
+  <!--History Fragment-->
+  <!--Home Fragment-->
+  <!--ContactList Fragment-->
+  <!--FileExplorerDFragement-->
+  <!--TransferDFragment-->
+  <!--Notifications-->
+  <!--Call Fragment-->
+  <string name="action_call_hangup">ඇමතුම අවසන් කරන්න</string>
+  <string name="new_group">නව සමූහය තනන්න</string>
+  <!--Text messages-->
+  <string name="time_just_now">මේ දැන්</string>
+  <string name="send_file">ගොනුව යවන්න</string>
+  <!--MediaPreferenceFragment-->
+  <!--Ringtone activity-->
+  <!--Read contacts permission-->
+  <!--Write call log permission-->
+  <!--Post notifications permission-->
+  <!--QRCode Scan-->
+  <!--Settings-->
+  <!--Conversation-->
+  <!--Contacts-->
+  <!--Account summary-->
+  <!--Share fragment-->
+  <!--Pending invitations-->
+  <!--Blacklist-->
+  <!--Smartlist-->
+  <!--File Transfer-->
+  <string name="file_transfer_status_canceled">අවලංගු කළා</string>
+  <!--Bottom Navigation-->
+  <!--TV-->
+  <!--Wizard-->
+  <!--Bottom sheet-->
+  <string name="bottomSheet_hangup_btn">ඇමතුම අවසන් කරන්න</string>
+  <string name="screen_share_btn_description">තිරය බෙදා ගන්න</string>
+  <!--Swarm Details-->
+  <string name="tab_settings">සැකසුම්</string>
+  <!--JamiId-->
+  <!--WelcomeJami-->
+  <!--Conversation details-->
+  <!--Donation-->
+  <string name="donation_card_not_now">දැන් නොවේ</string>
+  <!--Extension-->
+  <string name="export_side_step2_cancel">අවලංගු කරන්න</string>
+  <!--Accessibility-->
+  <!--Peer services-->
+</resources>

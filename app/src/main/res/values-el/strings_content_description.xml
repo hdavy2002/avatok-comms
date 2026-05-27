@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Strings for xml content description of images-->
+  <string name="dial_numeric_pad">Αριθμητικό Πληκτρολόγιο</string>
+  <string name="contact_unblock">Ανοίξτε την μπλοκ</string>
+  <string name="file_download_button">Λήψη</string>
+  <string name="control_play">Αναπαραγωγή</string>
+  <string name="control_replay">Απάντηση</string>
+  <string name="control_pause">Παύση</string>
+</resources>
