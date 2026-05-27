@@ -95,6 +95,13 @@ class HomeFragment: BaseSupportFragment<HomePresenter, HomeView>(),
         if (item.isEmpty()) Observable.empty()
         else Observable.timer(350, TimeUnit.MILLISECONDS)
     }.distinctUntilChanged()
+    // Polish-4 follow-up wiring point:
+    //   When the user types a non-Jami-ID string (handle, email),
+    //   feed it through com.avatok.comms.account.AvaTokDirectoryClient
+    //   .lookup() — on a hit, push the resolved jami_id back into
+    //   querySubject so the existing Jami search/add-contact path
+    //   picks it up. AvaTokDirectoryClient is already on disk; this
+    //   is one Disposable subscription away from being wired.
 
     @Inject
     lateinit var mAccountService: AccountService

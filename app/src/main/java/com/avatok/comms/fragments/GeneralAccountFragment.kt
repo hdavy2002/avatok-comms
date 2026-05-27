@@ -202,7 +202,20 @@ class GeneralAccountFragment : BasePreferenceFragment<GeneralAccountPresenter>()
         val alertDialog = MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.account_delete_dialog_message)
             .setTitle(R.string.account_delete_dialog_title)
-            .setPositiveButton(R.string.menu_delete) { dialog: DialogInterface?, whichButton: Int -> presenter.removeAccount() }
+            .setPositiveButton(R.string.menu_delete) { dialog: DialogInterface?, whichButton: Int ->
+                // Commit-B polish: deleting the Jami account also signs
+                // the user out of AvaTok so the next launch routes back
+                // through AvaTokLoginActivity (avatok.ai login WebView).
+                // Without this clear, HomeActivity would skip the
+                // WebView (sees a stored session) and dump them
+                // straight into the wizard with no path back.
+                try {
+                    com.avatok.comms.account.AvaTokSession.clear(requireContext())
+                } catch (_: Throwable) {
+                    // Non-fatal — proceed with Jami removal regardless.
+                }
+                presenter.removeAccount()
+            }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
         val activity: Activity? = activity

@@ -43,6 +43,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.avatok.comms.R
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+import kotlin.concurrent.thread
 
 class AvaTokLoginActivity : AppCompatActivity() {
 
@@ -53,6 +57,15 @@ class AvaTokLoginActivity : AppCompatActivity() {
         // session is established, navigation lands on "/" or any
         // non-auth path; we detect that to end the flow.
         const val LOGIN_URL = "https://avatok.ai/login"
+        const val ME_URL = "https://avatok.ai/api/jami/me"
+
+        // Intent extras passed into AccountWizardActivity so it can
+        // pre-fill the create-account wizard with what the user just
+        // told us during avatok.ai login. AccountWizardActivity reads
+        // these in onCreate and seeds AccountCreationViewModel.
+        const val EXTRA_AVATOK_DISPLAY_NAME = "avatok.display_name"
+        const val EXTRA_AVATOK_EMAIL = "avatok.email"
+        const val EXTRA_AVATOK_USER_ID = "avatok.user_id"
 
         // Path prefixes that mean "still on an auth surface" — the user
         // hasn't finished logging in yet. Anything else on avatok.ai
@@ -165,11 +178,14 @@ class AvaTokLoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Capture the avatok.ai cookies, persist them, then hand off to
+     * Capture the avatok.ai cookies, fetch the user's profile from
+     * `/api/jami/me`, persist both, then hand off to
      * AccountWizardActivity so Jami's existing create-account wizard
-     * runs to completion. The wizard creates the local Jami keypair —
-     * that's the part that gives the user a working comms identity
-     * for Commit B. The backend-keypair-fetch is the follow-up.
+     * runs to completion with pre-filled display name. The wizard
+     * creates the local Jami keypair — that's the part that gives the
+     * user a working comms identity for Commit B. The backend-keypair-
+     * fetch (cross-device same-identity) is the follow-up tracked in
+     * docs/proposals/avatok-comms-backend-endpoints.md.
      */
     private fun onLoginSuccess(landingUrl: String) {
         if (handedOff) return
@@ -182,18 +198,70 @@ class AvaTokLoginActivity : AppCompatActivity() {
             Log.w(TAG, "No avatok.ai cookie present after login landing at $landingUrl")
         }
 
+        // Fetch profile in a background thread (we're on UI thread now).
+        // We deliberately don't block the hand-off on this — if /me
+        // 401s or times out, we still ship the user through to the
+        // wizard with a blank pre-fill.
+        thread(start = true, name = "avatok-me-fetch") {
+            val profile = fetchMe(cookie)
+            runOnUiThread { proceedToWizard(cookie, profile) }
+        }
+    }
+
+    private data class AvaTokProfile(
+        val userId: String?,
+        val email: String?,
+        val displayName: String?,
+    )
+
+    /**
+     * Plain HttpsURLConnection call to /api/jami/me. Returns null on
+     * any failure — non-fatal, the wizard still works without pre-fill.
+     */
+    private fun fetchMe(cookie: String): AvaTokProfile? {
+        if (cookie.isBlank()) return null
+        return try {
+            val conn = (URL(ME_URL).openConnection() as HttpURLConnection).apply {
+                requestMethod = "GET"
+                setRequestProperty("Cookie", cookie)
+                setRequestProperty("Accept", "application/json")
+                setRequestProperty("User-Agent", "AvaTokComms/Android")
+                connectTimeout = 10_000
+                readTimeout = 10_000
+                instanceFollowRedirects = true
+            }
+            val code = conn.responseCode
+            if (code != 200) {
+                Log.w(TAG, "/api/jami/me returned HTTP $code")
+                return null
+            }
+            val body = conn.inputStream.bufferedReader().use { it.readText() }
+            val json = JSONObject(body)
+            AvaTokProfile(
+                userId = json.optString("user_id").ifBlank { null },
+                email = json.optString("email").ifBlank { null },
+                displayName = json.optString("display_name").ifBlank { null },
+            )
+        } catch (t: Throwable) {
+            Log.w(TAG, "/api/jami/me failed: ${t.message}")
+            null
+        }
+    }
+
+    private fun proceedToWizard(cookie: String, profile: AvaTokProfile?) {
         AvaTokSession.save(
             ctx = this,
             sessionCookie = cookie,
-            // We don't have email/displayName/userId yet — the
-            // /api/me-style endpoint comes with the backend keypair work.
-            // Save what we have; the wizard will set the Jami display
-            // name and the user can rename later.
-            userEmail = null,
-            displayName = null,
-            userId = null,
+            userEmail = profile?.email,
+            displayName = profile?.displayName,
+            userId = profile?.userId,
         )
-        Log.i(TAG, "AvaTok session persisted; handing off to AccountWizardActivity")
+        Log.i(
+            TAG,
+            "AvaTok session persisted (email=${profile?.email != null}, " +
+                "displayName=${profile?.displayName != null}); " +
+                "handing off to AccountWizardActivity",
+        )
 
         // Defer the intent until the next main-thread tick so the
         // progress overlay actually paints before the wizard fades in.
@@ -202,6 +270,9 @@ class AvaTokLoginActivity : AppCompatActivity() {
                 Intent(this, AccountWizardActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                         Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtra(EXTRA_AVATOK_DISPLAY_NAME, profile?.displayName)
+                    putExtra(EXTRA_AVATOK_EMAIL, profile?.email)
+                    putExtra(EXTRA_AVATOK_USER_ID, profile?.userId)
                 },
             )
             finish()

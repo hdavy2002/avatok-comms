@@ -89,6 +89,29 @@ class AccountWizardActivity : BaseActivity<AccountWizardPresenter>(), AccountWiz
         } else  // migration is not needed
             presenter.init(intent.action ?: AccountConfig.ACCOUNT_TYPE_JAMI)
 
+        // Commit-B polish: if AvaTokLoginActivity passed us the user's
+        // avatok.ai display name + email, pre-fill the wizard so the
+        // user doesn't have to retype info they just gave us. Doing this
+        // AFTER presenter.init so the viewModel is initialised.
+        val avatokDisplayName = intent?.getStringExtra(
+            AvaTokLoginActivity.EXTRA_AVATOK_DISPLAY_NAME
+        )
+        val avatokEmail = intent?.getStringExtra(
+            AvaTokLoginActivity.EXTRA_AVATOK_EMAIL
+        )
+        if (!avatokDisplayName.isNullOrBlank() || !avatokEmail.isNullOrBlank()) {
+            val seedViewModel: AccountCreationViewModel by viewModels()
+            if (seedViewModel.model.fullName.isNullOrBlank()) {
+                seedViewModel.model.fullName = avatokDisplayName ?: avatokEmail
+                Log.i(
+                    TAG,
+                    "Seeded wizard fullName from AvaTok session: " +
+                        "displayName=${!avatokDisplayName.isNullOrBlank()}, " +
+                        "fellBackToEmail=${avatokDisplayName.isNullOrBlank()}"
+                )
+            }
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wizard_container)) { view, insets ->
                 val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
