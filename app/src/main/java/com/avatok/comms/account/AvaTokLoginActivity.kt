@@ -31,9 +31,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -92,6 +95,27 @@ class AvaTokLoginActivity : AppCompatActivity() {
     // re-runs (it can fire multiple times during Clerk redirects).
     @Volatile private var handedOff: Boolean = false
 
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val urlPollRunnable = object : Runnable {
+        override fun run() {
+            // Clerk + Next.js use history.pushState for post-login
+            // routing — onPageFinished does NOT fire for those. Poll
+            // location.href via JS as a backstop so we always notice
+            // when the user lands on a non-auth avatok.ai page.
+            if (handedOff) return
+            webView.evaluateJavascript("location.href") { result ->
+                if (handedOff) return@evaluateJavascript
+                // result is a JSON-encoded string, e.g. "\"https://avatok.ai/dashboard\""
+                val cleaned = result?.trim()?.trim('"') ?: return@evaluateJavascript
+                if (cleaned.isNotEmpty() && cleaned != "null" && isPostLoginUrl(cleaned)) {
+                    Log.i(TAG, "Detected post-login URL via JS poll: $cleaned")
+                    onLoginSuccess(cleaned)
+                }
+            }
+            if (!handedOff) mainHandler.postDelayed(this, 1000L)
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,6 +165,16 @@ class AvaTokLoginActivity : AppCompatActivity() {
         } else {
             webView.restoreState(savedInstanceState)
         }
+
+        // Belt-and-suspenders: poll location.href every 1 s while the
+        // login activity is foregrounded. Triggers handover even when
+        // Clerk's client-side router doesn't fire onPageFinished.
+        mainHandler.postDelayed(urlPollRunnable, 1500L)
+    }
+
+    override fun onDestroy() {
+        mainHandler.removeCallbacks(urlPollRunnable)
+        super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -284,6 +318,10 @@ class AvaTokLoginActivity : AppCompatActivity() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             Log.d(TAG, "onPageStarted $url")
+            // Also check at navigation start — sometimes a real
+            // redirect lands us on the dashboard before any page-load
+            // event fires.
+            url?.takeIf { isPostLoginUrl(it) }?.let { onLoginSuccess(it) }
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
@@ -295,6 +333,31 @@ class AvaTokLoginActivity : AppCompatActivity() {
             } else {
                 hideProgress()
             }
+        }
+
+        /**
+         * Clerk + Next.js use client-side routing after auth — the URL
+         * changes via history.pushState/replaceState without a full page
+         * reload, so onPageFinished doesn't fire. doUpdateVisitedHistory
+         * DOES fire for those, which is how we catch the dashboard nav.
+         */
+        override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+            super.doUpdateVisitedHistory(view, url, isReload)
+            Log.d(TAG, "doUpdateVisitedHistory $url (reload=$isReload)")
+            url?.takeIf { isPostLoginUrl(it) }?.let { onLoginSuccess(it) }
+        }
+
+        override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?,
+        ): Boolean {
+            val url = request?.url?.toString()
+            Log.d(TAG, "shouldOverrideUrlLoading $url")
+            if (url != null && isPostLoginUrl(url)) {
+                onLoginSuccess(url)
+                return true // we'll handle the rest; don't navigate the WebView further
+            }
+            return false
         }
 
         override fun onReceivedError(

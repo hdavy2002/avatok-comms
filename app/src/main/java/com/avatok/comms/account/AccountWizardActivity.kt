@@ -99,10 +99,12 @@ class AccountWizardActivity : BaseActivity<AccountWizardPresenter>(), AccountWiz
         val avatokEmail = intent?.getStringExtra(
             AvaTokLoginActivity.EXTRA_AVATOK_EMAIL
         )
-        if (!avatokDisplayName.isNullOrBlank() || !avatokEmail.isNullOrBlank()) {
+        val seedName = avatokDisplayName?.takeIf { it.isNotBlank() }
+            ?: avatokEmail?.takeIf { it.isNotBlank() }
+        if (seedName != null) {
             val seedViewModel: AccountCreationViewModel by viewModels()
             if (seedViewModel.model.fullName.isNullOrBlank()) {
-                seedViewModel.model.fullName = avatokDisplayName ?: avatokEmail
+                seedViewModel.model.fullName = seedName
                 Log.i(
                     TAG,
                     "Seeded wizard fullName from AvaTok session: " +
