@@ -1,0 +1,4 @@
+[submodule "vendor/jami-client-android"]
+	path = vendor/jami-client-android
+	url = https://review.jami.net/jami-client-android
+	branch = master

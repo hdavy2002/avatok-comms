@@ -1,0 +1,35 @@
+# Android / Gradle
+.gradle/
+build/
+*.iml
+local.properties
+.idea/
+.cxx/
+captures/
+
+# Keystores (do NOT commit secrets)
+*.jks
+*.keystore
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+*.swp
+
+# Output
+*.apk
+*.aab
+release/
+
+# Logs
+*.log
+
+# Backups from patch operations
+*.orig
+*.bak
+*.bak[0-9]*
+
+# NOT ignored: vendor/jami-client-android/ — it's a git submodule
+# (gitlinks are tracked, but inner working tree is the submodule's own .gitignore)

@@ -1,0 +1,75 @@
+AvaTok Comms — third-party attributions
+========================================
+
+This software is built on top of upstream Free Software components.
+Each is licensed independently; the licenses below are reproduced or
+linked verbatim. The combined work is distributed under GPL-3.0-or-later
+(see LICENSE) because some components are GPL-3.0 and linked in-process.
+
+------------------------------------------------------------------------
+Jami (libjami daemon + libjamiclient + jami-client-android)
+------------------------------------------------------------------------
+
+  Copyright (C) Savoir-faire Linux Inc. and contributors.
+
+  Distributed under GPL-3.0-or-later.
+
+  Upstream: https://jami.net
+  Source:   https://review.jami.net/jami-client-android
+            https://review.jami.net/jami-daemon
+
+  Vendored into this repo as a git submodule at:
+    vendor/jami-client-android/
+
+  No modifications to Jami source are checked into this repository.
+  Build-time patches (kept in vendor's submodule pointer and applied
+  via sed/scripts in the workflow) are documented in docs/build.md.
+
+------------------------------------------------------------------------
+Jami's bundled native dependencies
+------------------------------------------------------------------------
+
+  Cross-compiled by Jami's contrib build system at build time:
+
+  - FFmpeg (LGPL-2.1+ / GPL-2+, https://ffmpeg.org)
+  - PJSIP / PJProject (GPL-2+, https://www.pjsip.org)
+  - OpenDHT (GPL-3+, https://opendht.net)
+  - GnuTLS (LGPL-2.1+, https://www.gnutls.org)
+  - libgmp (LGPL-3+ or GPL-2+, https://gmplib.org)
+  - libnettle (LGPL-3+, https://www.lysator.liu.se/~nisse/nettle)
+  - jsoncpp (MIT, https://github.com/open-source-parsers/jsoncpp)
+  - libgit2 (GPL-2 with linking exception, https://libgit2.org)
+  - libsecp256k1 (MIT, https://github.com/bitcoin-core/secp256k1)
+  - asio (Boost, https://think-async.com/Asio)
+  - msgpack-c (Boost, https://msgpack.org)
+  - dhtnet (GPL-3+, https://git.jami.net/savoirfairelinux/dhtnet)
+  - yaml-cpp (MIT, https://github.com/jbeder/yaml-cpp)
+  - restinio (BSD-3, https://github.com/Stiffstream/restinio)
+  - http_parser / llhttp (MIT, https://github.com/nodejs/llhttp)
+  - libupnp (BSD-3, https://pupnp.sourceforge.net)
+  - libnatpmp (BSD-3, https://miniupnp.tuxfamily.org)
+  - opus (BSD-3, https://opus-codec.org)
+  - libspeex / speexdsp (BSD-3, https://www.speex.org)
+  - libvpx (BSD-3, https://www.webmproject.org/code)
+  - x264 (GPL-2+, https://www.videolan.org/developers/x264.html)
+  - webrtc-audio-processing (BSD-3 / GPL combo, https://webrtc.org)
+  - zlib (zlib, https://zlib.net)
+
+Each component's licence governs its own use. The combined binary as
+distributed here is GPL-3.0-or-later because of the GPL-licensed
+components linked in-process.
+
+------------------------------------------------------------------------
+Android, Kotlin, AndroidX, Jetpack Compose
+------------------------------------------------------------------------
+
+Used per their respective licenses (Apache-2.0 for most; see each
+artifact's metadata in the gradle dependency report).
+
+------------------------------------------------------------------------
+Build tools
+------------------------------------------------------------------------
+
+Gradle, the Android Gradle Plugin, the Kotlin compiler, SWIG, autotools,
+and the Android NDK are used at build time but not redistributed in the
+APK. Their licenses do not apply to the distributed binary.
