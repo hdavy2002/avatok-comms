@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AvaTok logo — teal "A" with a coral dot crossbar.
+  Translated directly from logo.svg uploaded 2026-05-27.
+  Used in-app on the WebView login header + the Jami wizard
+  username page. Adaptive launcher icon uses ic_launcher_foreground.xml.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="110dp"
+    android:viewportWidth="120"
+    android:viewportHeight="110">
+
+    <!-- Teal "A" stroke. -->
+    <path
+        android:pathData="M 22 95 L 60 15 L 98 95"
+        android:strokeColor="#1FB5B0"
+        android:strokeWidth="22"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+
+    <!-- Coral dot where the A's crossbar would normally be. -->
+    <path
+        android:pathData="M 60 78 m -8 0 a 8 8 0 1 0 16 0 a 8 8 0 1 0 -16 0 z"
+        android:fillColor="#FF5350" />
+</vector>

@@ -38,15 +38,15 @@
                  rhythm stays balanced. -->
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="180dp"
-                android:layout_height="60dp"
+                android:layout_width="100dp"
+                android:layout_height="92dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="32dp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/avatok_logo" />
+                app:srcCompat="@drawable/ic_avatok_logo" />
 
             <TextView
                 android:layout_width="match_parent"

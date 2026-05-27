@@ -30,28 +30,43 @@
         android:layout_gravity="center"
         app:bounded_height="670dp">
 
+        <!--
+          Davy 2026-05-27: the original Jami layout had a faded
+          person-silhouette watermark + a "Create your AvaTok account"
+          headline on top. Both removed in favour of the AvaTok logo
+          sitting where the silhouette was — testers find the three-
+          headline stack (login → 'Create AvaTok account' button →
+          'Create your AvaTok account' title) confusing.
+        -->
         <ImageView
             android:id="@+id/background"
             android:layout_width="@dimen/wizard_image_background"
             android:layout_height="@dimen/wizard_image_background"
-            android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/pager"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="-200dp"
-            android:alpha="0.1"
-            android:src="@drawable/baseline_account_circle_white_36"/>
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_avatok_logo" />
 
+        <!-- Title kept in tree as visibility=gone so any view-binding
+             reference in JamiAccountCreationFragment.kt keeps compiling.
+             "@string/account_creation_ring" already says "Create your
+             AvaTok account" but we surface that intent via the AvaTok
+             logo + the button label inside the card. -->
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/text_margin"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/color_primary_light"
+            android:layout_margin="@dimen/text_margin"
             android:gravity="center"
             android:text="@string/account_creation_ring"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="@color/color_primary_light"
             android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+            android:visibility="gone" />
 
         <com.avatok.comms.views.WizardViewPager
             android:id="@+id/pager"

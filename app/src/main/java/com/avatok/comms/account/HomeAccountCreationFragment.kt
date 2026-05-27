@@ -98,7 +98,20 @@ class HomeAccountCreationFragment :
             // restore any of those paths via a settings entry later.
             ringCreateBtn.setOnClickListener { presenter.clickOnCreateAccount() }
             binding = this
-        }.root
+        }.root.also {
+            // Davy 2026-05-27: skip this whole screen — testers should
+            // jump straight from AvaTok login to the username page
+            // since the only path here is "Create AvaTok account"
+            // anyway. We post to the view so the fragment finishes
+            // its current layout pass before we tear it down with
+            // the navigation transaction.
+            //
+            // Guarded by savedInstanceState being null so a rotation
+            // mid-transition doesn't double-trigger.
+            if (savedInstanceState == null) {
+                it.post { presenter.clickOnCreateAccount() }
+            }
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()
