@@ -19,6 +19,12 @@ plugins {
     // plugin into its own plugin. We must apply it explicitly. Pinned to
     // Kotlin 2.3.10 to match libs.versions.toml's kotlin version.
     id("org.jetbrains.kotlin.plugin.compose") version "2.3.10"
+
+    // Hilt for DI of libjamiclient services (mirrors Jami's pattern).
+    // KSP runs Hilt's annotation processor (Hilt requires KSP or kapt;
+    // KSP is the modern path).
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -122,6 +128,16 @@ dependencies {
     // Kotlin coroutines — for collecting libjamiclient state flows when
     // we wire the daemon in commit 3
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+
+    // Hilt + RxJava — needed for the DI graph that wires libjamiclient
+    // services together. libjamiclient itself uses RxJava (BehaviorSubject /
+    // Observable), not Kotlin Flow. These versions come from Jami's
+    // vendored libs.versions.toml — keeps us on the same artefacts Jami
+    // tested against.
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

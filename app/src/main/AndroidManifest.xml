@@ -46,9 +46,14 @@
             </intent-filter>
         </activity>
 
-        <!-- Daemon-lifecycle service goes here in commit 2 (Phase 2 step D
-             continued). For now the app launches without starting libjami;
-             we just confirm the Compose UI renders. -->
+        <!-- Foreground service that owns the libjami daemon lifecycle.
+             Stub in Phase 3 commit 3a (compiles, starts foreground notification
+             but doesn't yet boot the daemon). Commit 3b wires libjamiclient
+             DaemonService injection + actual startDaemon() call. -->
+        <service
+            android:name=".services.JamiDaemonService"
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera|phoneCall" />
 
     </application>
 </manifest>
