@@ -14,6 +14,11 @@ plugins {
     // own jami-android/app keeps it via two compat flags in gradle.properties
     // (`android.builtInKotlin=true`, `android.newDsl=false`) — we don't need
     // those because we're starting fresh on AGP 9 conventions.
+
+    // Kotlin 2.0+ moved the Compose compiler out of the standalone Kotlin
+    // plugin into its own plugin. We must apply it explicitly. Pinned to
+    // Kotlin 2.3.10 to match libs.versions.toml's kotlin version.
+    id("org.jetbrains.kotlin.plugin.compose") version "2.3.10"
 }
 
 android {
