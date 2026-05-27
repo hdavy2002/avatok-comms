@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AvaTok wizard welcome screen.
+
+  Stripped from Jami's original: removed the GNU package logo + the
+  four extra buttons (Connect from another device, Connect from
+  backup, Connect to management server, Add SIP account). Left only
+  the AvaTok logo header + the single "Create AvaTok account"
+  CTA. Davy's design call 2026-05-27 — testers shouldn't see any
+  paths other than the AvaTok-blessed one.
+
+  HomeAccountCreationFragment.kt still references the removed button
+  IDs via view-binding nullable lookups; the .setOnClickListener
+  calls are guarded with safe-call so the removal is a no-op at
+  runtime.
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,26 +33,31 @@
             android:orientation="vertical"
             android:paddingBottom="16dp">
 
+            <!-- AvaTok logo. Sized to roughly match what the GNU Jami
+                 logo took up in the original layout so the vertical
+                 rhythm stays balanced. -->
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="32dp"
                 android:contentDescription="@string/app_name"
-                app:srcCompat="@drawable/ic_jami_full_logo" />
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/avatok_logo" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
                 android:gravity="center"
                 android:padding="30dp"
-                android:layout_marginBottom="18dp"
-                android:layout_marginTop="18dp"
                 android:text="@string/help_ring"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/ring_create_btn"
@@ -44,54 +65,9 @@
                 android:layout_width="@dimen/wizard_button_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/account_new_button"
                 android:drawableLeft="@drawable/baseline_account_circle_white_36"
-                android:drawableRight="@drawable/baseline_arrow_forward_white_18"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/link_device"
-                style="@style/WizardButton"
-                android:layout_width="@dimen/wizard_button_width"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="12dp"
-                android:text="@string/account_link_device"
-                android:drawableLeft="@drawable/baseline_devices_white_36"
-                android:drawableRight="@drawable/baseline_arrow_forward_white_18"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ring_import_account"
-                style="@style/ButtonOutLined"
-                android:layout_width="@dimen/wizard_button_width"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/account_link_archive_button"
-                android:drawableTint="@color/color_primary_dark"
-                android:drawableLeft="@drawable/baseline_backup_black_36"
-                android:drawableRight="@drawable/baseline_arrow_forward_black_18"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/account_connect_server"
-                style="@style/ButtonOutLined"
-                android:layout_width="@dimen/wizard_button_width"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="12dp"
-                android:text="@string/account_connect_server_button"
-                android:drawableTint="@color/color_primary_dark"
-                android:drawableLeft="@drawable/baseline_router_black_36"
-                android:drawableRight="@drawable/baseline_arrow_forward_black_18"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/sip_add_account"
-                style="@style/ButtonOutLined"
-                android:layout_width="@dimen/wizard_button_width"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/add_sip_account_title"
-                android:drawableTint="@color/color_primary_dark"
-                android:drawableLeft="@drawable/baseline_dialer_sip_24"
-                android:drawableRight="@drawable/baseline_arrow_forward_black_18"/>
+                android:drawableRight="@drawable/baseline_arrow_forward_white_18"
+                android:text="@string/account_new_button" />
 
         </LinearLayout>
 

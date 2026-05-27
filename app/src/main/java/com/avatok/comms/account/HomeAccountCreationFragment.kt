@@ -88,11 +88,15 @@ class HomeAccountCreationFragment :
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         FragAccHomeCreateBinding.inflate(inflater, container, false).apply {
-            linkDevice.setOnClickListener { presenter.clickOnLinkAccount() }
+            // Davy stripped the welcome screen down to just the
+            // "Create AvaTok account" path on 2026-05-27. The other
+            // four buttons (Link device, Connect server, Backup import,
+            // SIP account) were removed from frag_acc_home_create.xml,
+            // so the ViewBinding properties for them no longer exist.
+            // Their goTo* / clickOn* override + presenter handlers
+            // below remain as harmless dead code in case we need to
+            // restore any of those paths via a settings entry later.
             ringCreateBtn.setOnClickListener { presenter.clickOnCreateAccount() }
-            accountConnectServer.setOnClickListener { presenter.clickOnConnectAccount() }
-            ringImportAccount.setOnClickListener { presenter.clickOnBackupAccountLink() }
-            sipAddAccount.setOnClickListener { presenter.clickOnCreateSIPAccount() }
             binding = this
         }.root
 
