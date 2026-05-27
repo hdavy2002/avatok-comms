@@ -129,3 +129,64 @@ avatok-comms/
 Built on Jami (https://jami.net), the GPL-3.0 P2P communication platform
 by [Savoir-faire Linux](https://savoirfairelinux.com). This project is
 not affiliated with the Jami project. See [NOTICE](NOTICE).
+
+## Testing the APK
+
+The latest debug APK is at
+[releases/latest](https://github.com/hdavy2002/avatok-comms/releases/latest).
+Open that page on the phone's browser, tap the APK to download, install
+("Install unknown apps" prompt on first time only).
+
+### What works in this build
+
+- Account creation (keypair generated on-device — same as Jami stock)
+- QR-pair with another AvaTok APK user
+- Text messages, photos, voice calls, video calls — same engine as Jami
+- All settings + diagnostic screens — Jami's full UI, rebranded labels
+
+### Known limitations of this build
+
+- **Account is device-local only.** AvaTok website-login isn't wired yet —
+  that's Commit B. Backend endpoint spec is at
+  `avatok/docs/proposals/avatok-comms-backend-endpoints.md` and is the
+  next thing to land once the backend side is implemented.
+- **Asymmetric video can occur** when the two phones use different
+  hardware video decoders (it's a Jami stock-UI issue, not a network
+  issue — see Phase 1 session journal in `avatok/docs/sessions/`).
+  Workaround for testers: keep the phone screen on and held steady
+  during a call (no rotation, no backgrounding). If the issue still
+  occurs, on the receiving phone go to **Settings → Account → Media →
+  Video Codecs** and toggle VP8 off, leaving H.264 only.
+
+### Sending logs back to us
+
+If a tester hits a bug, they can:
+
+1. Open **Settings → Logs** in the app.
+2. Tap **Share** at the top of the logs screen.
+3. Pick an email / Slack / messaging app and send the file to whoever's
+   collecting test logs.
+
+This uses Android's standard share intent. No upload server is required
+for this build — Commit C will add a one-tap "Send to AvaTok support"
+upload once the backend `/api/support/logs` endpoint is live (spec'd in
+the backend-endpoints doc).
+
+### Reporting issues
+
+Until we have a triage tool, tester reports go to whichever channel Davy
+designates. Include with the log file:
+
+- Phone make and Android version of both ends of the call
+- The two AvaTok IDs (from Settings → Account → Show QR code)
+- Approximate time the issue happened
+- What was the user actually doing
+
+### Pre-public-release legal review needed
+
+This build is for **internal testing only**. Before any wider
+distribution (Play Store, public APK link to non-testers, F-Droid, etc.),
+a licensing lawyer should sign off on the GPL-client / closed-backend
+architecture and the Jami attribution stack. See
+[docs/licensing.md](docs/licensing.md) for the current attribution
+inventory.
