@@ -93,24 +93,31 @@ dependencies {
     // any JNI directly.
     implementation(project(":libjamiclient"))
 
-    // Standard AndroidX + Compose stack (versions inherited from Jami's
-    // libs.versions.toml via settings.gradle.kts versionCatalogs).
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // NOTE: we use explicit Gradle coordinates (not libs.* catalog entries)
+    // for the Compose stack because Jami's vendored libs.versions.toml
+    // doesn't declare Compose aliases — Jami's UI is View-based, not
+    // Compose. When we later own our own libs.versions.toml (Phase 6 or
+    // earlier when we stop sharing Jami's catalog), we'll move these
+    // back to alias references.
 
-    // Compose BOM keeps Compose libraries in lockstep.
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
+    // Standard AndroidX
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
-    // Kotlin coroutines & flow — for collecting libjamiclient state.
-    implementation(libs.kotlinx.coroutines.android)
+    // Compose BOM keeps the Compose libraries in lockstep
+    implementation(platform("androidx.compose:compose-bom:2024.10.01"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
 
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    // Kotlin coroutines — for collecting libjamiclient state flows when
+    // we wire the daemon in commit 3
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
