@@ -89,30 +89,11 @@ class AccountWizardActivity : BaseActivity<AccountWizardPresenter>(), AccountWiz
         } else  // migration is not needed
             presenter.init(intent.action ?: AccountConfig.ACCOUNT_TYPE_JAMI)
 
-        // Commit-B polish: if AvaTokLoginActivity passed us the user's
-        // avatok.ai display name + email, pre-fill the wizard so the
-        // user doesn't have to retype info they just gave us. Doing this
-        // AFTER presenter.init so the viewModel is initialised.
-        val avatokDisplayName = intent?.getStringExtra(
-            AvaTokLoginActivity.EXTRA_AVATOK_DISPLAY_NAME
-        )
-        val avatokEmail = intent?.getStringExtra(
-            AvaTokLoginActivity.EXTRA_AVATOK_EMAIL
-        )
-        val seedName = avatokDisplayName?.takeIf { it.isNotBlank() }
-            ?: avatokEmail?.takeIf { it.isNotBlank() }
-        if (seedName != null) {
-            val seedViewModel: AccountCreationViewModel by viewModels()
-            if (seedViewModel.model.fullName.isNullOrBlank()) {
-                seedViewModel.model.fullName = seedName
-                Log.i(
-                    TAG,
-                    "Seeded wizard fullName from AvaTok session: " +
-                        "displayName=${!avatokDisplayName.isNullOrBlank()}, " +
-                        "fellBackToEmail=${avatokDisplayName.isNullOrBlank()}"
-                )
-            }
-        }
+        // Pre-fill of fullName from AvaTok-side display-name was removed
+        // 2026-05-27 along with the WebView login. The POC landing
+        // doesn't capture a name at all, so there's nothing to seed.
+        // When real auth is wired again this block will come back —
+        // see avatok/docs/proposals/avatok-comms-jami-mvp-amendment-1.md.
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wizard_container)) { view, insets ->
