@@ -194,15 +194,23 @@ jobs:
           true
 
       # ---------------------------------------------------------------
-      # 10. Build yaml-cpp explicitly now that contrib dir exists
+      # 10. Build yaml-cpp explicitly IF the contrib build dir was
+      #     created by the first gradle pass.
+      #
+      #     Note: while our :app module is purely Kotlin/Compose (no
+      #     JNI dependency on the daemon), the first gradle pass will
+      #     NOT trigger the daemon's native build, so no contrib dir
+      #     exists. That's fine — yaml-cpp isn't needed in that case.
+      #     This step becomes load-bearing once :app starts linking
+      #     against libjami via libjamiclient (Phase 2 commit 3).
       # ---------------------------------------------------------------
-      - name: Build yaml-cpp contrib explicitly
+      - name: Build yaml-cpp contrib explicitly (skip if daemon not triggered)
         working-directory: vendor/jami-client-android/daemon/contrib
         run: |
           BUILD_DIR=build-aarch64-linux-android
           if [ ! -d "$BUILD_DIR" ]; then
-            echo "::error::Expected $BUILD_DIR after first gradle pass."
-            exit 1
+            echo "::notice::No contrib build dir — :app didn't pull in libjami daemon yet. Skipping yaml-cpp step."
+            exit 0
           fi
           cd "$BUILD_DIR"
           make .yaml-cpp
