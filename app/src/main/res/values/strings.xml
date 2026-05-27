@@ -42,7 +42,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="license">This software is provided \"as is\", without warranty of any kind. For details, see <u>GNU General Public License version 3 or later</u></string>
     <string name="description">Jami is free software for universal communication which respects the freedoms and privacy of its users.</string>
     <string name="credits">Credits</string>
-    <string name="pip_title">Jami Conference</string>
+    <string name="pip_title">AvaTok Conference</string>
 
     <string name="call_service_description">This service is necessary to keep your calls running in the foreground. It only runs during calls.</string>
     <string name="data_transfer_service_description">This service is necessary to display persistent notifications during file transfers. It only runs during file transfers.</string>
@@ -180,7 +180,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="menu_item_account_settings">Account Settings</string>
     <string name="menu_item_extension_list">Extensions Settings</string>
     <string name="menu_item_share">Share my account</string>
-    <string name="menu_item_about">About Jami</string>
+    <string name="menu_item_about">About AvaTok</string>
 
     <string name="video_setting_title">Video Settings</string>
 
@@ -226,7 +226,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="notif_channel_background_service_descr">Allows receiving calls and messages anytime.</string>
     <string name="notif_group_calls">Calls</string>
     <string name="notif_inprogress_group_call">Call in progress</string>
-    <string name="notif_background_service">Jami is currently running in the background</string>
+    <string name="notif_background_service">AvaTok is currently running in the background</string>
     <string name="notif_mark_as_read">Mark as read</string>
     <string name="notif_dismiss">Dismiss</string>
     <string name="notif_reply">Reply</string>
@@ -236,7 +236,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="notif_sync_title">Syncing data…</string>
     <string name="notif_location_title">Sharing location with %1$s</string>
     <string name="notif_channel_reconnect">Background syncing</string>
-    <string name="notif_reconnect_title">Jami is syncing…</string>
+    <string name="notif_reconnect_title">AvaTok is syncing…</string>
     <string name="location_share_contact">%1$s is sharing location with you</string>
     <string name="notif_location_multi_title">Sharing location with %1$d contacts</string>
     <string name="notif_location_remaining">%1$d minutes remaining</string>
@@ -260,7 +260,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="hist_out_call">Outgoing call of %1$s</string>
     <string name="call_duration">Lasted %s</string>
     <string name="call_on_hold">Call is on hold</string>
-    <string name="start_error_title">Unable to start Jami</string>
+    <string name="start_error_title">Unable to start AvaTok</string>
     <string name="action_call_accept">Accept call</string>
     <string name="action_call_accept_audio">Accept with audio</string>
     <string name="action_call_accept_video">Accept with video</string>
@@ -282,7 +282,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="write_a_message">Write message</string>
     <string name="scan_qr">Scan QR Code</string>
     <string name="qr_code">QR Code</string>
-    <string name="qr_code_not_contact">Not a Jami contact QR code</string>
+    <string name="qr_code_not_contact">Not a AvaTok contact QR code</string>
     <string name="new_group">Create new group</string>
     <string name="ab_action_flipcamera">Flip camera</string>
     <string name="ab_action_hidepreview">Hide preview</string>
@@ -315,20 +315,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="ringtone_error_size_too_big">This file is too big. The maximum size is %1$dkB.</string>
     <string name="ringtone_custom_prompt">Set a custom ringtone</string>
     <string name="ringtone_custom_label">Custom</string>
-    <string name="ringtone_jami_tones">Jami ringtones</string>
+    <string name="ringtone_jami_tones">AvaTok ringtones</string>
     <string name="ringtone_default_name" translatable="false">1 AfroNigeria.opus</string>
     <string name="ca_root_file" translatable="false">cacert.pem</string>
 
     <!-- Read contacts permission -->
-    <string name="permission_dialog_read_contacts_message">Jami requires the “Read contacts” permission. Enable it in device settings in order to use this feature.</string>
+    <string name="permission_dialog_read_contacts_message">AvaTok requires the “Read contacts” permission. Enable it in device settings in order to use this feature.</string>
 
     <!-- Write call log permission -->
-    <string name="permission_dialog_write_call_log_message">Jami requires the “Write call log” permission. Enable it in device settings in order to use this feature.</string>
+    <string name="permission_dialog_write_call_log_message">AvaTok requires the “Write call log” permission. Enable it in device settings in order to use this feature.</string>
 
     <!-- Post notifications permission -->
     <string name="permission_dialog_post_notifications_title">Allow notifications</string>
-    <string name="permission_dialog_post_notifications_message">Jami needs the notifications permission to alert you of incoming calls and messages, even when the app is in the background. Without it, you may miss calls.</string>
-    <string name="permission_dialog_post_notifications_blocked_message">Notifications are disabled for Jami. Without them you will miss incoming calls and messages. Please enable notifications for Jami in the device settings.</string>
+    <string name="permission_dialog_post_notifications_message">AvaTok needs the notifications permission to alert you of incoming calls and messages, even when the app is in the background. Without it, you may miss calls.</string>
+    <string name="permission_dialog_post_notifications_blocked_message">Notifications are disabled for AvaTok. Without them you will miss incoming calls and messages. Please enable notifications for AvaTok in the device settings.</string>
     <string name="permission_dialog_open_settings">Open settings</string>
     <string name="permission_dialog_later">Later</string>
 
@@ -395,7 +395,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
     <string name="conversation_preference_color">Conversation color</string>
     <string name="conversation_preference_emoji">Conversation emoji</string>
-    <string name="conversation_type_contact">Jami contact</string>
+    <string name="conversation_type_contact">AvaTok contact</string>
     <string name="conversation_type_private">Private</string>
     <string name="conversation_type_group">Group</string>
     <string name="conversation_contact_invited">%1$s was invited to join the conversation.</string>
@@ -427,11 +427,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="prompt_new_password">New password</string>
     <string name="prompt_new_password_optional">New password (optional)</string>
     <string name="prompt_new_password_repeat">Confirm new password</string>
-    <string name="account_create_title">Create Jami account</string>
+    <string name="account_create_title">Create AvaTok account</string>
     <string name="prompt_new_username">Enter new username</string>
     <string name="prompt_hint_username">Username</string>
-    <string name="help_password_choose">Choose a strong password you will remember to protect your Jami account.</string>
-    <string name="help_password_enter">Enter your main Jami account password.</string>
+    <string name="help_password_choose">Choose a strong password you will remember to protect your AvaTok account.</string>
+    <string name="help_password_enter">Enter your main AvaTok account password.</string>
     <string name="help_server_enter">Enter URL of management server.</string>
     <string name="pin_copied">Authentication code copied to clipboard.</string>
     <string name="copied_clipboard">Copied to clipboard.</string>
@@ -465,7 +465,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="total_devices">Total devices: </string>
 
     <!-- Share fragment -->
-    <string name="share_message">Scan this code with Jami</string>
+    <string name="share_message">Scan this code with AvaTok</string>
     <string name="share_message_no_account">Please select an account to share.</string>
     <string name="share_your_account_information">Share my contact information</string>
     <string name="share_contact_information">Share contact information</string>
@@ -565,8 +565,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="speech_recogniton_unavailable">Speech recognition is unavailable.</string>
     <string name="audio_permission_rationale_title">Audio permission required</string>
     <string name="camera_permission_rationale_title">Camera permission required</string>
-    <string name="audio_permission_rationale_message">Jami requires the microphone permission to use speech-to-text and record audio features. It will be asked in the next step.</string>
-    <string name="camera_permission_rationale_message">Jami requires the camera permission to record video and place video call. It will be asked in the next step.</string>
+    <string name="audio_permission_rationale_message">AvaTok requires the microphone permission to use speech-to-text and record audio features. It will be asked in the next step.</string>
+    <string name="camera_permission_rationale_message">AvaTok requires the camera permission to record video and place video call. It will be asked in the next step.</string>
     <string name="unable_to_start_recorder">Unable to start recording audio.</string>
     <string name="error_sharing_file">An error occurred while sharing the file.</string>
     <string name="error_opening_file">An error occurred while opening the file.</string>
@@ -626,17 +626,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="picker_title">Select contacts</string>
     <string name="picker_btn">Select contacts</string>
     <string name="no_contact_to_add">You have no contact to add</string>
-    <string name="bottomsheet_contact">Contact Jami\n%1$s</string>
+    <string name="bottomsheet_contact">Contact AvaTok\n%1$s</string>
     <string name="bottomsheet_remove">Remove member</string>
     <string name="error_open_no_app_found">No application found to handle this file: %1$s</string>
     <string name="swarm_detail_no_document">You have no documents yet.</string>
     <string name="group_admin">Admin</string>
-    <string name="share_contact_intent_title">Add this contact on Jami!</string>
-    <string name="share_contact_intent_body">You can add this contact “%1$s” on the Jami distributed communication platform: %2$s</string>
+    <string name="share_contact_intent_title">Add this contact on AvaTok!</string>
+    <string name="share_contact_intent_body">You can add this contact “%1$s” on the AvaTok distributed communication platform: %2$s</string>
 
-    <!--  JamiId  -->
-    <string name="jami_id_copy">Copy JamiId</string>
-    <string name="jami_id_share">Share JamiId</string>
+    <!--  AvaTokId  -->
+    <string name="jami_id_copy">Copy AvaTokId</string>
+    <string name="jami_id_share">Share AvaTokId</string>
     <string name="jami_id_validate">Register username</string>
     <string name="jami_id_available">The username is available.</string>
     <string name="jami_id_not_available">The username is unavailable.</string>
@@ -644,9 +644,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="jami_id_looking_for_availability">Checking username availability…</string>
     <string name="jami_id_choose_username">Choose a username</string>
 
-    <!--  WelcomeJami  -->
-    <string name="welcome_jami_title">Welcome to Jami</string>
-    <string name="welcome_jami_description">Share your Jami identifier in order to be contacted more easily!</string>
+    <!--  WelcomeAvaTok  -->
+    <string name="welcome_jami_title">Welcome to AvaTok</string>
+    <string name="welcome_jami_description">Share your AvaTok identifier in order to be contacted more easily!</string>
 
     <!--  Conversation details  -->
     <string name="details">Details</string>
@@ -659,7 +659,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="mute_conversation">Mute conversation</string>
 
     <!-- Donation -->
-    <string name="donation_card_description">If you enjoy using Jami and believe in our mission, do you want to make a donation?</string>
+    <string name="donation_card_description">If you enjoy using AvaTok and believe in our mission, do you want to make a donation?</string>
     <string name="donation_card_not_now">Not now</string>
     <string name="donation_donate">Donate</string>
     <string name="donation_setting_title">Donation reminder</string>
