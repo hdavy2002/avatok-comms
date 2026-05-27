@@ -57,6 +57,8 @@ import com.avatok.comms.R
 import com.avatok.comms.about.AboutFragment
 import com.avatok.comms.account.AccountEditionFragment
 import com.avatok.comms.account.AccountWizardActivity
+import com.avatok.comms.account.AvaTokLoginActivity
+import com.avatok.comms.account.AvaTokSession
 import com.avatok.comms.account.JamiAccountSummaryFragment
 import com.avatok.comms.application.JamiApplication
 import com.avatok.comms.databinding.ActivityHomeBinding
@@ -424,7 +426,19 @@ class HomeActivity : AppCompatActivity(), ContactPickerFragment.OnContactedPicke
                 .observeOn(DeviceUtils.uiScheduler)
                 .subscribe { accounts: List<Account> ->
                     if (accounts.isEmpty()) {
-                        startActivity(Intent(this, AccountWizardActivity::class.java).apply {
+                        // Commit B: first-run users land on the AvaTok
+                        // WebView login (avatok.ai sign-in / sign-up /
+                        // forgot-password). On success it hands off to
+                        // AccountWizardActivity to provision the local
+                        // Jami keypair. Existing AvaTok-session users
+                        // who somehow lost their Jami account fall
+                        // straight through to the wizard.
+                        val firstRunIntent = if (AvaTokSession.isLoggedIn(this)) {
+                            Intent(this, AccountWizardActivity::class.java)
+                        } else {
+                            Intent(this, AvaTokLoginActivity::class.java)
+                        }
+                        startActivity(firstRunIntent.apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         })
                     }

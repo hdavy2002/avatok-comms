@@ -197,6 +197,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:resizeableActivity="true"
             android:theme="@style/AppThemeBase.Light"
             android:windowSoftInputMode="adjustResize" />
+        <!--
+          Commit B: AvaTok WebView login (sign-in / sign-up /
+          forgot-password) served from avatok.ai. Routed to from
+          HomeActivity on first run when no local Jami account exists
+          AND no AvaTok session is stored.
+        -->
+        <activity
+            android:name=".account.AvaTokLoginActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:resizeableActivity="true"
+            android:theme="@style/AppThemeBase.Light"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".account.ImportArchiveReceiverActivity"
             android:exported="true"

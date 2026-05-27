@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AvaTok login screen.
+
+  Top: AvaTok logo + thin separator.
+  Middle: WebView that loads avatok.ai/login. avatok.ai's existing
+          Clerk UI provides sign-in, sign-up, forgot-password links.
+  Overlay: indeterminate ProgressBar shown while the WebView loads.
+
+  Once the WebView lands on a post-login URL (anything on avatok.ai
+  that's not /login, /register, /forgot-password, /reset-password),
+  AvaTokLoginActivity captures the session cookie and hands off to
+  Jami's existing account-creation wizard.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- AvaTok logo header -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@android:color/white"
+            android:elevation="2dp">
+
+            <ImageView
+                android:id="@+id/avatok_login_logo"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@drawable/avatok_logo" />
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E5E5" />
+
+        <!-- WebView fills the rest -->
+        <WebView
+            android:id="@+id/avatok_login_webview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <!-- Loading overlay -->
+    <FrameLayout
+        android:id="@+id/avatok_login_progress_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CCFFFFFF"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/avatok_login_progress_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/avatok_login_setting_up"
+                android:textColor="#222222"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>

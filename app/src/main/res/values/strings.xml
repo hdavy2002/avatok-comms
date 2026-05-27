@@ -745,4 +745,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="peer_services_error_timeout">Request timed out</string>
     <string name="peer_services_error_unknown">Could not retrieve services</string>
 
+    <!-- AvaTok login screen (Commit B). -->
+    <string name="avatok_login_setting_up">Setting up your AvaTok identity…</string>
+    <string name="avatok_login_failed">Couldn’t complete AvaTok login. Please try again.</string>
+    <string name="avatok_login_network_error">Network error — check your connection and retry.</string>
+
 </resources>
