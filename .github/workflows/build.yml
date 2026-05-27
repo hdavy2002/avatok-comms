@@ -1,0 +1,292 @@
+# .github/workflows/build.yml — AvaTok Comms
+#
+# Builds the AvaTok Comms Android debug APK on a Linux runner.
+# Same recipe as github.com/hdavy2002/jami-build-runner (which builds
+# upstream Jami stock), but pointed at OUR :app module instead of
+# Jami's. The vendored Jami submodule provides libjamiclient + the
+# C++ daemon; we apply the same build-time patches before invoking
+# gradle.
+#
+# Triggers:
+#   - push to main: re-runs on any change to this repo
+#   - manual: Actions → "Build AvaTok Comms" → Run workflow
+
+name: Build AvaTok Comms
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  # Versions matching Jami's docker/Dockerfile (vendor/jami-client-android/docker/Dockerfile)
+  # — bump these in sync if you bump the submodule.
+  NDK_VERSION: '29.0.14206865'
+  CMAKE_VERSION: '4.1.2'
+  BUILD_TOOLS_VERSION: '36.1.0'
+  ANDROID_API_LEVEL: '36'
+  SWIG_VERSION: '4.2.1'
+  TARGET_ABI: 'arm64-v8a'
+
+permissions:
+  contents: write   # needed to publish a GitHub Release on successful main builds
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout avatok-comms (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # ---------------------------------------------------------------
+      # 1. Linux toolchain (mirrors vendor/jami-client-android/docker/Dockerfile)
+      # ---------------------------------------------------------------
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            asciidoc autoconf autogen automake autopoint bc bison \
+            build-essential bzip2 cmake curl doxygen gettext git \
+            libpcre2-dev libpcre3 libpcre3-dev libtool locales m4 nasm \
+            ninja-build pkg-config python-is-python3 ruby ruby-dev ssh \
+            texinfo unzip yasm zip
+          sudo locale-gen en_US.UTF-8
+          sudo update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
+      # ---------------------------------------------------------------
+      # 2. SWIG >= 4.2 from source (Ubuntu Noble's package is too old)
+      # ---------------------------------------------------------------
+      - name: Cache SWIG build
+        id: cache-swig
+        uses: actions/cache@v4
+        with:
+          path: /opt/swig
+          key: swig-${{ env.SWIG_VERSION }}-ubuntu-24.04
+
+      - name: Build & install SWIG ${{ env.SWIG_VERSION }} from source
+        if: steps.cache-swig.outputs.cache-hit != 'true'
+        run: |
+          wget -O /tmp/swig.tar.gz \
+            https://github.com/swig/swig/archive/v${SWIG_VERSION}.tar.gz
+          sudo tar xzf /tmp/swig.tar.gz -C /opt
+          sudo mv /opt/swig-${SWIG_VERSION} /opt/swig
+          cd /opt/swig
+          sudo ./autogen.sh
+          sudo ./configure --prefix=/opt/swig/install
+          sudo make -j$(nproc)
+          sudo make install
+
+      - name: Add SWIG to PATH
+        run: |
+          echo "/opt/swig/install/bin" >> $GITHUB_PATH
+          /opt/swig/install/bin/swig -version
+
+      # ---------------------------------------------------------------
+      # 3. JDK 17 — AGP 9.1 requirement
+      # ---------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # ---------------------------------------------------------------
+      # 4. Android SDK + NDK + CMake
+      # ---------------------------------------------------------------
+      - name: Set up Android SDK (base only)
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'tools'
+
+      - name: Install Android SDK packages individually
+        run: |
+          set -e
+          yes Y | sdkmanager --licenses > /dev/null
+          sdkmanager "platforms;android-${ANDROID_API_LEVEL}"
+          sdkmanager "build-tools;${BUILD_TOOLS_VERSION}"
+          sdkmanager "ndk;${NDK_VERSION}"
+          sdkmanager "cmake;${CMAKE_VERSION}"
+
+      - name: Export Android env
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "ANDROID_NDK=$ANDROID_HOME/ndk/${NDK_VERSION}" >> $GITHUB_ENV
+          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/${NDK_VERSION}" >> $GITHUB_ENV
+
+      # ---------------------------------------------------------------
+      # 5. Apply build-time patches to the Jami submodule (in-place,
+      #    NOT committed back). Same set as jami-build-runner.
+      # ---------------------------------------------------------------
+      - name: "Patch: downgrade Jami's gradle wrapper to 9.3.1 (avoid 9.4.0-rc-1 deadlock)"
+        working-directory: vendor/jami-client-android
+        run: |
+          PROP=jami-android/gradle/wrapper/gradle-wrapper.properties
+          # idempotent — checks both directions
+          if grep -q 'gradle-9.4.0-rc-1' "$PROP"; then
+            sed -i 's|gradle-9.4.0-rc-1-bin\.zip|gradle-9.3.1-bin.zip|' "$PROP"
+          fi
+          grep distributionUrl "$PROP"
+
+      - name: "Patch: add -module JamiService to make-swig.sh"
+        working-directory: vendor/jami-client-android
+        run: |
+          SCRIPT=daemon/bin/jni/make-swig.sh
+          if ! grep -q -- '-module JamiService' "$SCRIPT"; then
+            sed -i 's|^swig -v -c++ -java \\$|swig -v -c++ -java -module JamiService \\|' "$SCRIPT"
+          fi
+          grep -n -- '-module JamiService' "$SCRIPT"
+
+      - name: "Patch: rename values-nn_NO → values-nn-rNO"
+        working-directory: vendor/jami-client-android
+        run: |
+          OLD=jami-android/app/src/main/res/values-nn_NO
+          NEW=jami-android/app/src/main/res/values-nn-rNO
+          if [ -d "$OLD" ]; then mv "$OLD" "$NEW"; fi
+          ls -d "$NEW" 2>/dev/null && echo "OK"
+
+      # ---------------------------------------------------------------
+      # 6. Bootstrap Jami daemon tools (m4/libtool/autotools/pkg-config)
+      # ---------------------------------------------------------------
+      - name: Bootstrap Jami daemon tools
+        working-directory: vendor/jami-client-android/daemon/extras/tools
+        run: |
+          ./bootstrap
+          make -j 1
+          export PATH="$(pwd)/build/bin:$PATH"
+          make -j 1
+          echo "$(pwd)/build/bin" >> $GITHUB_PATH
+
+      # ---------------------------------------------------------------
+      # 7. Pre-generate SWIG JNI bindings (so Kotlin compile of
+      #    libjamiclient sees the generated classes from the start)
+      # ---------------------------------------------------------------
+      - name: Pre-generate SWIG JNI bindings
+        working-directory: vendor/jami-client-android/daemon/bin/jni
+        env:
+          PACKAGEDIR: ${{ github.workspace }}/vendor/jami-client-android/jami-android/libjamiclient/src/main/java
+        run: |
+          ./make-swig.sh
+
+      # ---------------------------------------------------------------
+      # 8. Gradle cache
+      # ---------------------------------------------------------------
+      - name: Cache Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # ---------------------------------------------------------------
+      # 9. First gradle pass — expected to fail at yaml-cpp find_package.
+      #    Side-effect we want: creates daemon/contrib/build-aarch64-linux-android/.
+      # ---------------------------------------------------------------
+      - name: First gradle pass to bootstrap contrib dir (expected to fail at yaml-cpp)
+        id: first_pass
+        continue-on-error: true
+        run: |
+          ./gradlew :app:assembleDebug \
+            -Parchs=${TARGET_ABI} \
+            --no-daemon \
+            --max-workers=2 \
+          2>&1 | tee gradle-first-pass.log || true
+          true
+
+      # ---------------------------------------------------------------
+      # 10. Build yaml-cpp explicitly now that contrib dir exists
+      # ---------------------------------------------------------------
+      - name: Build yaml-cpp contrib explicitly
+        working-directory: vendor/jami-client-android/daemon/contrib
+        run: |
+          BUILD_DIR=build-aarch64-linux-android
+          if [ ! -d "$BUILD_DIR" ]; then
+            echo "::error::Expected $BUILD_DIR after first gradle pass."
+            exit 1
+          fi
+          cd "$BUILD_DIR"
+          make .yaml-cpp
+          test -f "../aarch64-linux-android/lib/cmake/yaml-cpp/yaml-cpp-config.cmake" \
+            || { echo "::error::yaml-cpp-config.cmake not produced"; exit 1; }
+
+      # ---------------------------------------------------------------
+      # 11. Real build — our :app module
+      # ---------------------------------------------------------------
+      - name: Build AvaTok APK (real pass)
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew :app:assembleDebug \
+            -Parchs=${TARGET_ABI} \
+            --no-daemon \
+            --max-workers=2 \
+            --stacktrace \
+          2>&1 | tee gradle-build.log
+
+      # ---------------------------------------------------------------
+      # 12. Locate and verify the APK
+      # ---------------------------------------------------------------
+      - name: Find and verify APK
+        id: apk
+        run: |
+          APK=$(find app/build/outputs/apk -name "*.apk" -type f | head -1)
+          if [ -z "$APK" ]; then
+            echo "::error::No APK produced. See gradle-build.log."
+            exit 1
+          fi
+          ls -la "$APK"
+          echo "apk_path=$APK" >> "$GITHUB_OUTPUT"
+
+      - name: Stage APK with stable filename
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          cp "${{ steps.apk.outputs.apk_path }}" /tmp/avatok-comms-arm64-debug.apk
+          ls -la /tmp/avatok-comms-arm64-debug.apk
+
+      - name: Get Jami daemon short SHA (for release tag)
+        id: jami_sha
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: vendor/jami-client-android/daemon
+        run: |
+          echo "short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub Release
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}-jami-${{ steps.jami_sha.outputs.short }}
+          name: "AvaTok build #${{ github.run_number }} — debug (daemon ${{ steps.jami_sha.outputs.short }})"
+          body: |
+            **AvaTok Comms** Android **debug** APK — Phase 2 scaffolding.
+
+            Built from this repo's `main` at commit `${{ github.sha }}`,
+            with vendored Jami daemon at `${{ steps.jami_sha.outputs.short }}`.
+
+            Architecture: arm64-v8a only.
+
+            **Install on phone:** open this page on the phone, tap the APK
+            file to download, then tap to install (Android may prompt
+            "Install unknown apps" for the browser the first time).
+
+            This is GPL-3.0 software. Source is in this repo.
+            [Workflow run #${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          files: /tmp/avatok-comms-arm64-debug.apk
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: avatok-comms-arm64-debug.apk
+          path: ${{ steps.apk.outputs.apk_path }}
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build.log
+          path: gradle-build.log
+          retention-days: 7
