@@ -5,9 +5,15 @@
 // state where it can compile (a stub Activity) and is wired to
 // :libjamiclient via project() dependency.
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    // NOTE: do NOT apply org.jetbrains.kotlin.android — AGP 9+ has built-in
+    // Kotlin support and the standalone plugin is now a fatal error. Jami's
+    // own jami-android/app keeps it via two compat flags in gradle.properties
+    // (`android.builtInKotlin=true`, `android.newDsl=false`) — we don't need
+    // those because we're starting fresh on AGP 9 conventions.
 }
 
 android {
@@ -53,8 +59,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    // AGP 9+ built-in Kotlin uses this DSL instead of the old kotlinOptions block.
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
     }
 
     buildFeatures {
