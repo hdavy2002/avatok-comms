@@ -218,26 +218,62 @@ jobs:
             || { echo "::error::yaml-cpp-config.cmake not produced"; exit 1; }
 
       # ---------------------------------------------------------------
-      # 11. Real build — our :app module (withUnifiedPush flavor only)
+      # 11a. Inject google-services.json from GitHub Actions secret.
       #
-      # We intentionally only build the withUnifiedPush flavor:
-      #   - noPush has no push wakeup → cross-cellular delivery fails
-      #     (see openspec change add-avatok-comms-push-wakeup).
-      #   - withFirebase requires the dhtproxy to be configured with
-      #     our own FCM credentials; dhtproxy.jami.net uses Jami's,
-      #     so withFirebase pointed at the public proxy would fail
-      #     the same way as noPush. Closing that requires paid hosting
-      #     which is explicitly off the table (design.md Decision 5).
+      # The Firebase project `avatok-comms` (project number 998388047199,
+      # Android app id 1:998388047199:android:2aa79d6fc101aebf30eaea) owns
+      # the FCM credentials that wake the user's phone. Its config JSON is
+      # stored as the GH Actions secret GOOGLE_SERVICES_JSON_BASE64.
       #
-      # withUnifiedPush + ntfy.sh as the distributor uses only Jami's
-      # free public infrastructure (dhtproxy.jami.net, bootstrap.jami.net,
-      # turn.jami.net, ns.jami.net) and works fine across cellular.
+      # We never commit google-services.json to the public repo, but it
+      # has to be on disk at app/google-services.json before Gradle builds
+      # the withFirebase flavor so the google-services plugin can read it.
       # ---------------------------------------------------------------
-      - name: Build AvaTok APK (withUnifiedPush, real pass)
+      - name: Inject google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          if [ -z "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "::error::GOOGLE_SERVICES_JSON_BASE64 secret is not set."
+            echo "::error::Set it on hdavy2002/avatok-comms via:"
+            echo "::error::  base64 -i google-services.json | gh secret set GOOGLE_SERVICES_JSON_BASE64 --repo hdavy2002/avatok-comms"
+            exit 1
+          fi
+          echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > app/google-services.json
+          # Sanity check: confirm it parses and has the expected project.
+          if ! jq -e '.project_info.project_id == "avatok-comms"' app/google-services.json > /dev/null; then
+            echo "::error::google-services.json did not look right (project_id != avatok-comms)."
+            exit 1
+          fi
+          echo "google-services.json injected ($(wc -c < app/google-services.json) bytes)"
+
+      # ---------------------------------------------------------------
+      # 11b. Real build — our :app module (withFirebase flavor)
+      #
+      # withFirebase uses FCM directly. The Jami DHT proxy
+      # (dhtproxy.jami.net) cannot push to our FCM project (its
+      # credentials are Jami's, not ours), so we route through a small
+      # Cloudflare Worker at avatok-comms-bridge.getmystuffme.workers.dev
+      # that does the FCM-token → push translation for us. The daemon
+      # registers as platform="unifiedpush" with the Worker URL; see
+      # JamiApplicationFirebase.kt for the wiring.
+      #
+      # Result: zero on-device friction (no ntfy install), zero on-going
+      # cost (Worker is free-tier, FCM is free forever, KV is free-tier).
+      #
+      # We do NOT build the noPush or withUnifiedPush flavors here:
+      #   - noPush has no wakeup; cross-cellular delivery fails.
+      #   - withUnifiedPush needs the user to install ntfy; we skip that.
+      #
+      # See openspec change add-avatok-comms-push-wakeup in the avatok
+      # repo for the full architecture rationale.
+      # ---------------------------------------------------------------
+      - name: Build AvaTok APK (withFirebase, real pass)
         shell: bash
         run: |
           set -o pipefail
-          ./gradlew :app:assembleWithUnifiedPushDebug \
+          ./gradlew :app:assembleWithFirebaseDebug \
+            -PbuildFirebase=true \
             -Parchs=${TARGET_ABI} \
             --no-daemon \
             --max-workers=2 \
@@ -250,13 +286,13 @@ jobs:
       - name: Find and verify APK
         id: apk
         run: |
-          # Pin to the withUnifiedPush output dir so we never accidentally
-          # ship a no-push APK again. The Gradle assemble task above only
-          # builds this flavor, but a defensive glob protects us against
-          # someone re-broadening the task in future.
-          APK=$(find app/build/outputs/apk/withUnifiedPush -name "*.apk" -type f | head -1)
+          # Pin to the withFirebase output dir so we never accidentally
+          # ship a no-push or ntfy-flavored APK again. The Gradle
+          # assemble task above only builds this flavor, but a defensive
+          # glob protects us against someone re-broadening the task.
+          APK=$(find app/build/outputs/apk/withFirebase -name "*.apk" -type f | head -1)
           if [ -z "$APK" ]; then
-            echo "::error::No withUnifiedPush APK produced. See gradle-build.log."
+            echo "::error::No withFirebase APK produced. See gradle-build.log."
             exit 1
           fi
           ls -la "$APK"

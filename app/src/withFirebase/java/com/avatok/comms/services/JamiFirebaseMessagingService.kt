@@ -95,8 +95,12 @@ class JamiFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(refreshedToken: String) {
         Log.w(TAG, "onNewToken $refreshedToken")
+        // AvaTok hybrid flow: the daemon expects a UnifiedPush HTTPS URL
+        // as its push token, not the raw FCM token. Re-register the new
+        // FCM token with the avatok-comms-bridge Worker to get an updated
+        // pushUrl, then hand THAT to the daemon.
         val app = JamiApplication.instance as JamiApplicationFirebase?
-        app?.pushToken = Pair(refreshedToken, "")
+        app?.onFcmTokenRefreshed(refreshedToken)
     }
 
     companion object {

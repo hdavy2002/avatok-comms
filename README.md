@@ -132,34 +132,28 @@ not affiliated with the Jami project. See [NOTICE](NOTICE).
 
 ## Testing the APK
 
-### Step 0 — install a UnifiedPush distributor first (required)
-
-Before installing AvaTok, install **ntfy** from the Play Store:
-[`https://play.google.com/store/apps/details?id=io.heckel.ntfy`](https://play.google.com/store/apps/details?id=io.heckel.ntfy).
-Open ntfy once after install (no account needed — just open and close it).
-
-**Why:** AvaTok is a Jami client. Jami's free public DHT proxy
-(`dhtproxy.jami.net`) wakes up your phone when a new message arrives
-by sending a push notification through the UnifiedPush protocol. ntfy
-is a free, open-source UnifiedPush distributor that handles that wake-up.
-Without a distributor installed, the AvaTok daemon goes offline when
-Android backgrounds the app and messages sent to you while you're
-backgrounded will not be delivered.
-
-The first time you open AvaTok after installing ntfy, AvaTok will
-prompt you to pick ntfy as the push distributor — tap **Confirm**.
-
-We use this architecture because it lets AvaTok use Jami's free
-public infrastructure end-to-end with zero servers on our side. Other
-UnifiedPush distributors (NextPush, Conversations, etc.) work too —
-ntfy is just the one we recommend.
-
-### Step 1 — install AvaTok
+### Install AvaTok
 
 The latest debug APK is at
 [releases/latest](https://github.com/hdavy2002/avatok-comms/releases/latest).
 Open that page on the phone's browser, tap the APK to download, install
-("Install unknown apps" prompt on first time only).
+("Install unknown apps" prompt on first time only). No helper apps
+required — push wake-up is handled through Firebase Cloud Messaging,
+which is built into every Android device.
+
+### Architecture in one line
+
+AvaTok is a Jami client. Identity, contacts, chat, calls, swarm sync,
+file transfer, end-to-end encryption — all handled by the Jami engine
+against Jami's free public infrastructure (`dhtproxy.jami.net`,
+`bootstrap.jami.net`, `turn.jami.net`, `ns.jami.net`). Push wake-up
+for backgrounded phones goes through a small Cloudflare Worker we own
+(`avatok-comms-bridge.getmystuffme.workers.dev`), which translates the
+DHT proxy's push notification into an FCM data message in the
+`avatok-comms` Firebase project. The user's phone wakes via FCM
+(Google's standard Android push pipe) and the daemon reconnects to
+the DHT to fetch the queued value. See
+[`docs/architecture.md`](docs/architecture.md) for the full picture.
 
 ### What works in this build
 
