@@ -218,13 +218,26 @@ jobs:
             || { echo "::error::yaml-cpp-config.cmake not produced"; exit 1; }
 
       # ---------------------------------------------------------------
-      # 11. Real build — our :app module
+      # 11. Real build — our :app module (withUnifiedPush flavor only)
+      #
+      # We intentionally only build the withUnifiedPush flavor:
+      #   - noPush has no push wakeup → cross-cellular delivery fails
+      #     (see openspec change add-avatok-comms-push-wakeup).
+      #   - withFirebase requires the dhtproxy to be configured with
+      #     our own FCM credentials; dhtproxy.jami.net uses Jami's,
+      #     so withFirebase pointed at the public proxy would fail
+      #     the same way as noPush. Closing that requires paid hosting
+      #     which is explicitly off the table (design.md Decision 5).
+      #
+      # withUnifiedPush + ntfy.sh as the distributor uses only Jami's
+      # free public infrastructure (dhtproxy.jami.net, bootstrap.jami.net,
+      # turn.jami.net, ns.jami.net) and works fine across cellular.
       # ---------------------------------------------------------------
-      - name: Build AvaTok APK (real pass)
+      - name: Build AvaTok APK (withUnifiedPush, real pass)
         shell: bash
         run: |
           set -o pipefail
-          ./gradlew :app:assembleDebug \
+          ./gradlew :app:assembleWithUnifiedPushDebug \
             -Parchs=${TARGET_ABI} \
             --no-daemon \
             --max-workers=2 \
@@ -237,9 +250,13 @@ jobs:
       - name: Find and verify APK
         id: apk
         run: |
-          APK=$(find app/build/outputs/apk -name "*.apk" -type f | head -1)
+          # Pin to the withUnifiedPush output dir so we never accidentally
+          # ship a no-push APK again. The Gradle assemble task above only
+          # builds this flavor, but a defensive glob protects us against
+          # someone re-broadening the task in future.
+          APK=$(find app/build/outputs/apk/withUnifiedPush -name "*.apk" -type f | head -1)
           if [ -z "$APK" ]; then
-            echo "::error::No APK produced. See gradle-build.log."
+            echo "::error::No withUnifiedPush APK produced. See gradle-build.log."
             exit 1
           fi
           ls -la "$APK"

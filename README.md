@@ -132,6 +132,30 @@ not affiliated with the Jami project. See [NOTICE](NOTICE).
 
 ## Testing the APK
 
+### Step 0 — install a UnifiedPush distributor first (required)
+
+Before installing AvaTok, install **ntfy** from the Play Store:
+[`https://play.google.com/store/apps/details?id=io.heckel.ntfy`](https://play.google.com/store/apps/details?id=io.heckel.ntfy).
+Open ntfy once after install (no account needed — just open and close it).
+
+**Why:** AvaTok is a Jami client. Jami's free public DHT proxy
+(`dhtproxy.jami.net`) wakes up your phone when a new message arrives
+by sending a push notification through the UnifiedPush protocol. ntfy
+is a free, open-source UnifiedPush distributor that handles that wake-up.
+Without a distributor installed, the AvaTok daemon goes offline when
+Android backgrounds the app and messages sent to you while you're
+backgrounded will not be delivered.
+
+The first time you open AvaTok after installing ntfy, AvaTok will
+prompt you to pick ntfy as the push distributor — tap **Confirm**.
+
+We use this architecture because it lets AvaTok use Jami's free
+public infrastructure end-to-end with zero servers on our side. Other
+UnifiedPush distributors (NextPush, Conversations, etc.) work too —
+ntfy is just the one we recommend.
+
+### Step 1 — install AvaTok
+
 The latest debug APK is at
 [releases/latest](https://github.com/hdavy2002/avatok-comms/releases/latest).
 Open that page on the phone's browser, tap the APK to download, install
