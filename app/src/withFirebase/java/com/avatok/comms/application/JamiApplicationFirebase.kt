@@ -186,6 +186,16 @@ class JamiApplicationFirebase : JamiApplication() {
     }
 
     fun onMessageReceived(remoteMessage: RemoteMessage) {
+        // Phase 3 safety net: stamp the moment we heard from
+        // dhtproxy → bridge → FCM so PushNotificationLogsActivity can show
+        // "last DHT proxy contact". Best-effort; never block push handling.
+        try {
+            getSharedPreferences(PREFS_PUSH_HEALTH, MODE_PRIVATE).edit()
+                .putLong(KEY_LAST_PUSH_AT, System.currentTimeMillis())
+                .apply()
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to stamp last-push time", e)
+        }
         // The on-the-wire FCM data fields match what dhtproxy would have
         // sent to a UnifiedPush distributor (the Worker forwards each
         // top-level JSON key as an FCM data field), so this stays
@@ -220,6 +230,12 @@ class JamiApplicationFirebase : JamiApplication() {
         private const val KEY_FCM_TOKEN = "fcm_token"
         private const val KEY_INSTALL_ID = "install_id"
         private const val KEY_PUSH_URL = "push_url"
+
+        // Mirror of PushNotificationLogsActivity.{PREFS_PUSH_HEALTH,
+        // KEY_LAST_PUSH_AT}. Kept as literals here to avoid the main source
+        // set depending on a flavor-specific constant.
+        private const val PREFS_PUSH_HEALTH = "avatok_push_health"
+        private const val KEY_LAST_PUSH_AT = "last_push_at"
 
         private val TAG = JamiApplicationFirebase::class.simpleName
     }

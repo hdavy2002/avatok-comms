@@ -44,6 +44,27 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Phase 3 push-health safety net: daemon badge + last DHT proxy
+             contact. Both updated on the existing 3s poll in the activity. -->
+        <TextView
+            android:id="@+id/daemonStatus"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            tools:text="● Daemon: Online" />
+
+        <TextView
+            android:id="@+id/lastPushContact"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="4dp"
+            tools:text="Last DHT proxy contact: 2 minutes ago" />
+
         <TextView
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"

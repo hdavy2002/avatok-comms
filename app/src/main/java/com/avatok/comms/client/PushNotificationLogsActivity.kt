@@ -16,9 +16,11 @@
  */
 package com.avatok.comms.client
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -119,6 +121,41 @@ class PushNotificationLogsActivity : AppCompatActivity() {
         binding.pushNormalCount.text = "Normal: ${mHardwareService.normalPriorityPushCount}"
         binding.pushHighCount.text = "High: ${mHardwareService.highPriorityPushCount}"
         binding.pushUnknownCount.text = "Unknown: ${mHardwareService.unknownPriorityPushCount}"
+        updateDaemonStatus()
+        updateLastPushContact()
+    }
+
+    /** Phase 3 safety net: green/amber/red daemon badge from the account
+     *  registration state, mirroring GeneralAccountFragment's mapping. */
+    private fun updateDaemonStatus() {
+        val account = mAccountService.currentAccount
+        val (label, colorRes) = when {
+            account == null -> "No account" to R.color.red_400
+            !account.isEnabled -> "Disabled" to R.color.red_400
+            account.isTrying -> "Connecting…" to android.R.color.holo_orange_dark
+            account.isInError -> "Connection error" to R.color.red_400
+            account.isRegistered -> "Online" to R.color.green_500
+            else -> "Offline" to R.color.red_400
+        }
+        val color = ContextCompat.getColor(this, colorRes)
+        binding.daemonStatus.text = "● Daemon: $label"
+        binding.daemonStatus.setTextColor(color)
+    }
+
+    /** Phase 3 safety net: when did dhtproxy → bridge → FCM last wake us?
+     *  The withFirebase flavor stamps PREFS_PUSH_HEALTH/KEY_LAST_PUSH_AT on
+     *  every received push. Other flavors leave it unset → "never". */
+    private fun updateLastPushContact() {
+        val ts = getSharedPreferences(PREFS_PUSH_HEALTH, Context.MODE_PRIVATE)
+            .getLong(KEY_LAST_PUSH_AT, 0L)
+        binding.lastPushContact.text = if (ts <= 0L) {
+            "Last DHT proxy contact: never"
+        } else {
+            val rel = DateUtils.getRelativeTimeSpanString(
+                ts, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS
+            )
+            "Last DHT proxy contact: $rel"
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -240,7 +277,9 @@ class PushNotificationLogsActivity : AppCompatActivity() {
             .string.pref_logs_start)
         binding.startLoggingButton.setBackgroundColor(ContextCompat
             .getColor(this, if (logging) R.color.red_400 else R.color.colorSecondary))
-        binding.testPushButton.isGone = !logging
+        // Phase 3: keep the test-push button always available so a lone
+        // tester can self-trigger a wakeup without first starting logging.
+        binding.testPushButton.isGone = false
     }
 
     override fun onDestroy() {
@@ -250,6 +289,13 @@ class PushNotificationLogsActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = PushNotificationLogsActivity::class.simpleName!!
+
+        // Shared with JamiApplicationFirebase (withFirebase flavor), which
+        // stamps the last received-push time so this screen can show when
+        // the device last heard from dhtproxy → bridge → FCM. Kept as plain
+        // literals because the two live in different source sets.
+        const val PREFS_PUSH_HEALTH = "avatok_push_health"
+        const val KEY_LAST_PUSH_AT = "last_push_at"
     }
 
 }
