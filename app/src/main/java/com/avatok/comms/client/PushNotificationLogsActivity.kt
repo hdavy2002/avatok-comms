@@ -37,6 +37,7 @@ import com.avatok.comms.client.LogsActivity.LogAdapter
 import com.avatok.comms.client.LogsActivity.LogMessage
 import com.avatok.comms.databinding.ActivityPushNotificationLogsBinding
 import com.avatok.comms.utils.AndroidFileUtils
+import com.avatok.comms.utils.BatteryOptimizationHelper
 import com.avatok.comms.utils.ContentUri
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -123,6 +124,24 @@ class PushNotificationLogsActivity : AppCompatActivity() {
         binding.pushUnknownCount.text = "Unknown: ${mHardwareService.unknownPriorityPushCount}"
         updateDaemonStatus()
         updateLastPushContact()
+        updateBatteryStatus()
+    }
+
+    /** Phase 3 safety net: show whether AvaTok is exempt from battery
+     *  optimization (the usual reason pushes don't arrive on idle phones),
+     *  and let the tester fix it in one tap. */
+    private fun updateBatteryStatus() {
+        if (BatteryOptimizationHelper.isIgnoringBatteryOptimizations(this)) {
+            binding.batteryOptStatus.text = "Battery: unrestricted ✓"
+            binding.batteryOptStatus.setTextColor(ContextCompat.getColor(this, R.color.green_500))
+            binding.batteryOptStatus.setOnClickListener(null)
+        } else {
+            binding.batteryOptStatus.text = "● Battery: restricted — tap to fix"
+            binding.batteryOptStatus.setTextColor(ContextCompat.getColor(this, R.color.red_400))
+            binding.batteryOptStatus.setOnClickListener {
+                BatteryOptimizationHelper.requestIgnoreBatteryOptimizations(this)
+            }
+        }
     }
 
     /** Phase 3 safety net: green/amber/red daemon badge from the account

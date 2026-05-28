@@ -66,6 +66,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
             tools:text="Last DHT proxy contact: 2 minutes ago" />
 
         <TextView
+            android:id="@+id/batteryOptStatus"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            android:padding="4dp"
+            tools:text="● Battery: restricted — tap to fix" />
+
+        <TextView
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

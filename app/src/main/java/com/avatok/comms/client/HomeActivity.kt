@@ -68,6 +68,7 @@ import com.avatok.comms.fragments.HomeFragment
 import com.avatok.comms.fragments.WelcomeJamiFragment
 import com.avatok.comms.service.DRingService
 import com.avatok.comms.settings.SettingsFragment
+import com.avatok.comms.utils.BatteryOptimizationHelper
 import com.avatok.comms.utils.ContentUri
 import com.avatok.comms.utils.ContentUri.isJamiLink
 import com.avatok.comms.utils.ContentUri.toJamiLink
@@ -243,6 +244,40 @@ class HomeActivity : AppCompatActivity(), ContactPickerFragment.OnContactedPicke
         onBackPressedDispatcher.addCallback(this, conversationBackPressedCallback)
         handleIntent(intent)
         checkPostNotificationsPermission()
+        checkBatteryOptimization()
+    }
+
+    /**
+     * Push-reliability: on first run, if AvaTok isn't already exempt from
+     * battery optimization, prompt once. The positive button fires the
+     * one-tap system exemption dialog; on known-aggressive OEMs a neutral
+     * button deep-links to the auto-start manager (no API exists for that).
+     * Guarded by a prefs flag so we never nag — the same actions are
+     * re-available from the push-notification logs screen.
+     */
+    private fun checkBatteryOptimization() {
+        if (BatteryOptimizationHelper.isIgnoringBatteryOptimizations(this)) return
+        val prefs = getSharedPreferences(PREFS_BATTERY_OPT, Context.MODE_PRIVATE)
+        if (prefs.getBoolean(PREF_BATTERY_OPT_ASKED, false)) return
+        prefs.edit().putBoolean(PREF_BATTERY_OPT_ASKED, true).apply()
+
+        val oem = BatteryOptimizationHelper.isAggressiveOem()
+        val message = "AvaTok needs to keep receiving messages and calls while your " +
+            "screen is off. Allow it to run without battery restrictions so notifications " +
+            "aren't delayed or blocked." +
+            if (oem) "\n\nYour phone's manufacturer also has a separate \"auto-start\" " +
+                "setting — enable AvaTok there too for reliable delivery." else ""
+        val builder = MaterialAlertDialogBuilder(this)
+            .setTitle("Keep AvaTok reliable")
+            .setMessage(message)
+            .setNegativeButton(R.string.permission_dialog_later, null)
+            .setPositiveButton("Allow") { _, _ ->
+                BatteryOptimizationHelper.requestIgnoreBatteryOptimizations(this)
+            }
+        if (oem) builder.setNeutralButton("Auto-start settings") { _, _ ->
+            BatteryOptimizationHelper.openOemAutoStartSettings(this)
+        }
+        builder.show()
     }
 
     private fun checkPostNotificationsPermission() {
@@ -711,6 +746,8 @@ class HomeActivity : AppCompatActivity(), ContactPickerFragment.OnContactedPicke
         private const val PREFS_NOTIF_PERM = "notif_permission"
         private const val PREF_NOTIF_PERM_ASKED = "asked_once"
         private const val STATE_NOTIF_PROMPT_SHOWN = "notif_permission_prompt_shown"
+        private const val PREFS_BATTERY_OPT = "battery_opt"
+        private const val PREF_BATTERY_OPT_ASKED = "asked_once"
         private const val CONVERSATIONS_CATEGORY = "conversations"
         val shareIntentSanitizer = IntentSanitizer.Builder()
             .allowAction(Intent.ACTION_SEND)
