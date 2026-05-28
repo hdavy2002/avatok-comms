@@ -25,6 +25,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.HiltAndroidApp
+import net.jami.model.ConfigKey
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -102,6 +103,77 @@ class JamiApplicationFirebase : JamiApplication() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Can't start service", e)
+        }
+        scheduleTurnRefresh()
+    }
+
+    // ---- Phase 2.5: Cloudflare Realtime TURN -------------------------------
+
+    private val turnHandler = Handler(Looper.getMainLooper())
+    private val turnRunnable = object : Runnable {
+        override fun run() {
+            maybeRefreshTurn()
+            turnHandler.postDelayed(this, TURN_RECHECK_INTERVAL_MS)
+        }
+    }
+
+    /** Run a TURN check now, then re-check every few hours. The check is a
+     *  cheap SharedPreferences read unless creds are missing/near expiry. */
+    private fun scheduleTurnRefresh() {
+        turnHandler.removeCallbacks(turnRunnable)
+        turnHandler.post(turnRunnable)
+    }
+
+    /**
+     * Point the Jami account's TURN config at our Cloudflare Realtime TURN
+     * (via the bridge's /turn-credentials endpoint). Credentials are
+     * short-lived (<=48h), so we cache the expiry and only re-fetch when
+     * within TURN_REFRESH_MARGIN_MS of it — re-applying on every cold start
+     * would needlessly re-register the account. Any failure leaves the
+     * existing TURN config (Jami's free turn.jami.net) untouched.
+     */
+    private fun maybeRefreshTurn() {
+        thread(name = "avatok-turn-refresh", start = true) {
+            try {
+                val prefs = getSharedPreferences(PREFS_BRIDGE, MODE_PRIVATE)
+                val now = System.currentTimeMillis()
+                if (prefs.getLong(KEY_TURN_EXPIRES_AT, 0L) - now > TURN_REFRESH_MARGIN_MS) return@thread
+                val account = mAccountService.currentAccount ?: return@thread
+
+                val installId = prefs.getString(KEY_INSTALL_ID, null)
+                val suffix = if (installId != null) "&id=$installId" else ""
+                val conn = (URL("$BRIDGE_URL/turn-credentials?ttl=$TURN_TTL_SECONDS$suffix")
+                    .openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    connectTimeout = 10000
+                    readTimeout = 10000
+                }
+                if (conn.responseCode !in 200..299) {
+                    Log.w(TAG, "TURN endpoint HTTP ${conn.responseCode}; keeping existing TURN config")
+                    return@thread
+                }
+                val body = conn.inputStream.bufferedReader().use { it.readText() }
+                val jami = JSONObject(body).optJSONObject("jami") ?: return@thread
+                val server = jami.optString("server")
+                val username = jami.optString("username")
+                val password = jami.optString("password")
+                if (server.isEmpty() || username.isEmpty() || password.isEmpty()) {
+                    Log.w(TAG, "TURN config incomplete; skipping")
+                    return@thread
+                }
+                account.setDetail(ConfigKey.TURN_ENABLE, true)
+                account.setDetail(ConfigKey.TURN_SERVER, server)
+                account.setDetail(ConfigKey.TURN_USERNAME, username)
+                account.setDetail(ConfigKey.TURN_PASSWORD, password)
+                account.setDetail(ConfigKey.TURN_REALM, jami.optString("realm"))
+                mAccountService.setAccountDetails(account.accountId, account.config.all)
+
+                val ttl = jami.optLong("ttl", TURN_TTL_SECONDS)
+                prefs.edit().putLong(KEY_TURN_EXPIRES_AT, now + ttl * 1000L).apply()
+                Log.i(TAG, "Applied Cloudflare TURN config to account ${account.accountId}")
+            } catch (e: Exception) {
+                Log.e(TAG, "TURN refresh failed; keeping existing config", e)
+            }
         }
     }
 
@@ -236,6 +308,13 @@ class JamiApplicationFirebase : JamiApplication() {
         // set depending on a flavor-specific constant.
         private const val PREFS_PUSH_HEALTH = "avatok_push_health"
         private const val KEY_LAST_PUSH_AT = "last_push_at"
+
+        // Phase 2.5 TURN. 24h credentials (CF max is 48h); refresh when
+        // within 6h of expiry; re-check every 4h while the process lives.
+        private const val KEY_TURN_EXPIRES_AT = "turn_expires_at"
+        private const val TURN_TTL_SECONDS = 86400L
+        private const val TURN_REFRESH_MARGIN_MS = 6L * 3600L * 1000L
+        private const val TURN_RECHECK_INTERVAL_MS = 4L * 3600L * 1000L
 
         private val TAG = JamiApplicationFirebase::class.simpleName
     }
