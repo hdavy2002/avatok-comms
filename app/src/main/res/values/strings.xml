@@ -760,7 +760,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="avatok_login_network_error">Network error — check your connection and retry.</string>
 
     <!-- AvaTok native welcome / landing screen (POC pass, replaces WebView). -->
-    <string name="avatok_welcome_title">Welcome to AvaTok</string>
     <string name="avatok_welcome_subtitle">Private, peer-to-peer messaging and video. No middleman.</string>
     <string name="avatok_welcome_proceed">Get started</string>
 
