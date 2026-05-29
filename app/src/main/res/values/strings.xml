@@ -19,8 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="app_name" translatable="false">AvaTok</string>
     <string name="app_author" translatable="false">Savoir-faire Linux Inc.</string>
     <string name="app_release" translatable="false">Euclid - %1$s</string>
-    <string name="app_website" translatable="false">https://jami.net</string>
-    <string name="app_website_contribute" translatable="false"><u>https://jami.net/contribute</u></string>
+    <string name="app_website" translatable="false">https://avatok.ai</string>
+    <string name="app_website_contribute" translatable="false"><u>https://avatok.ai/contribute</u></string>
     <string name="gnu_license_website" translatable="false">https://www.gnu.org/licenses/gpl.html</string>
     <string name="savoirfairelinux_website" translatable="false">https://savoirfairelinux.com</string>
 
@@ -336,8 +336,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     <string name="scan_qr_account_message">Scan the QR Code of the account you want to add.</string>
     <string name="title_activity_qrcode">Share my account</string>
     <string name="error_scan_no_camera_permissions">The QR scanner requires the camera permission. Camera permission is disabled. Enable it in device settings in order to use this feature.</string>
-    <string name="tab_code">My Code</string>
-    <string name="tab_scan">Scan Code</string>
+    <string name="tab_code">Share my QR Code</string>
+    <string name="tab_scan">Scan QR Code</string>
+    <string name="add_contact_dialog_title">Add contact?</string>
+    <string name="add_contact_dialog_message">Add “%1$s” to your AvaTok contacts and start a conversation?</string>
+    <string name="add_contact_action">Add</string>
+    <string name="copy_id_label">Copy my AvaTok ID</string>
+    <string name="id_copied">ID copied to clipboard</string>
+    <string name="paste_id_hint">Paste an AvaTok ID</string>
+    <string name="add_from_id">Add contact from ID</string>
+    <string name="upload_qr_image">Upload QR image</string>
+    <string name="no_qr_found">No QR code found in this image</string>
 
     <!-- Settings -->
     <string name="clear_history_dialog_title">Clear history?</string>

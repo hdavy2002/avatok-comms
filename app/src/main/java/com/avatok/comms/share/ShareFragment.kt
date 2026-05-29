@@ -16,9 +16,14 @@
  */
 package com.avatok.comms.share
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.widget.Toast
+import com.avatok.comms.client.HomeActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,6 +74,22 @@ class ShareFragment : BaseSupportFragment<SharePresenter, ShareView>() {
                     shareButton.text = getText(R.string.share_contact_information)
                 shareButton.setOnClickListener { shareContact(contact) }
                 shareButton.isEnabled = true
+
+                // Show the owner's AvaTok ID with a copy action.
+                val ringId = contact.contact.uri.rawRingId
+                myIdText.text = ringId
+                copyIdButton.setOnClickListener {
+                    val cm = requireContext()
+                        .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    cm.setPrimaryClip(ClipData.newPlainText("AvaTok ID", ringId))
+                    Toast.makeText(requireContext(), R.string.id_copied, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // Paste an AvaTok ID received elsewhere and add it as a contact.
+            addFromIdButton.setOnClickListener {
+                val id = pasteIdInput.text?.toString()?.trim().orEmpty()
+                if (id.isNotEmpty()) (activity as? HomeActivity)?.confirmAddContact(id)
             }
 
             mBinding = this
@@ -91,12 +112,15 @@ class ShareFragment : BaseSupportFragment<SharePresenter, ShareView>() {
             )
         )
         val displayUri = contact.displayUri
+        // Share a tappable AvaTok App Link so recipients open the app (or the
+        // install page) instead of a plain marketing URL.
+        val contactLink = "https://link.avatok.ai/id/" + contact.contact.uri.rawRingId
         sharingIntent.putExtra(
             Intent.EXTRA_TEXT,
             getString(
                 if (contact.contact.isUser) R.string.account_share_body
                 else R.string.share_contact_intent_body,
-                displayUri, getText(R.string.app_website)
+                displayUri, contactLink
             )
         )
 

@@ -95,10 +95,23 @@ class QRCodeFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        (dialog as BottomSheetDialog).behavior.apply {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.behavior.apply {
             state = BottomSheetBehavior.STATE_EXPANDED
             skipCollapsed = true
+        }
+        // Make the sheet fill the screen so the QR content (centered in its
+        // layout) sits in the middle of the view instead of being pinned to
+        // the bottom with empty space above it.
+        dialog.setOnShowListener {
+            val sheet = dialog.findViewById<View>(
+                com.google.android.material.R.id.design_bottom_sheet
+            )
+            if (sheet != null) {
+                sheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                sheet.requestLayout()
+                BottomSheetBehavior.from(sheet).state = BottomSheetBehavior.STATE_EXPANDED
+            }
         }
         return dialog
     }

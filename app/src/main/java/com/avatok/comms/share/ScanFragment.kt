@@ -23,6 +23,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.os.Bundle
 import android.util.Log
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.HybridBinarizer
 import com.avatok.comms.R
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.google.zxing.BarcodeFormat
@@ -80,7 +88,9 @@ class ScanFragment : BaseSupportFragment<ScanPresenter, ScanView>(), ScanView {
             mBinding?.barcodeScanner?.pause()
             mBinding?.barcodeScanner?.barcodeView?.stopDecoding()
             (parentFragment as? QRCodeFragment)?.dismiss()
-            presenter.onBarcodeScanned(result.text)
+            // Ask the user to confirm before adding the scanned contact.
+            (activity as? HomeActivity)?.confirmAddContact(result.text)
+                ?: presenter.onBarcodeScanned(result.text)
         }
 
         override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
@@ -97,11 +107,55 @@ class ScanFragment : BaseSupportFragment<ScanPresenter, ScanView>(), ScanView {
         }.root
     }
 
+    private val pickImage =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri != null) decodeImageUri(uri)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (hasCameraPermission()) {
             hideErrorPanel()
             initializeBarcode()
+        }
+        mBinding?.uploadQrButton?.setOnClickListener { pickImage.launch("image/*") }
+    }
+
+    private fun decodeImageUri(uri: android.net.Uri) {
+        try {
+            val cr = requireContext().contentResolver
+            val bmp: Bitmap = if (Build.VERSION.SDK_INT >= 28) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(cr, uri)) { d, _, _ ->
+                    d.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                MediaStore.Images.Media.getBitmap(cr, uri)
+            }
+            val text = decodeQr(bmp)
+            if (text != null) {
+                (parentFragment as? QRCodeFragment)?.dismiss()
+                (activity as? HomeActivity)?.confirmAddContact(text)
+            } else {
+                Toast.makeText(context, R.string.no_qr_found, Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Error decoding QR image", e)
+            Toast.makeText(context, R.string.no_qr_found, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun decodeQr(bitmap: Bitmap): String? {
+        val w = bitmap.width
+        val h = bitmap.height
+        val pixels = IntArray(w * h)
+        bitmap.getPixels(pixels, 0, w, 0, 0, w, h)
+        val source = RGBLuminanceSource(w, h, pixels)
+        val binary = BinaryBitmap(HybridBinarizer(source))
+        return try {
+            MultiFormatReader().decode(binary).text
+        } catch (e: Exception) {
+            null
         }
     }
 

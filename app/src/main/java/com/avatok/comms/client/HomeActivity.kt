@@ -413,7 +413,12 @@ class HomeActivity : AppCompatActivity(), ContactPickerFragment.OnContactedPicke
 
             Intent.ACTION_VIEW, DRingService.ACTION_CONV_ACCEPT -> {
                 val intentUri = intent.data
-                if (intentUri.isJamiLink()) {
+                if (intentUri != null && intentUri.host == "link.avatok.ai"
+                    && intentUri.path?.startsWith("/id/") == true) {
+                    // AvaTok contact App Link: https://link.avatok.ai/id/<hash>
+                    val hash = intentUri.lastPathSegment
+                    if (!hash.isNullOrBlank()) confirmAddContact(hash)
+                } else if (intentUri.isJamiLink()) {
                     mHomeFragment!!.handleIntent(Intent(Intent.ACTION_SEARCH).apply {
                         putExtra(SearchManager.QUERY, intentUri.toJamiLink())
                     })
@@ -577,6 +582,31 @@ class HomeActivity : AppCompatActivity(), ContactPickerFragment.OnContactedPicke
             .subscribe { account ->
                 startConversation(account.accountId, Uri.fromString(conversationId))
             })
+    }
+
+    /**
+     * Validate a scanned/pasted/deep-linked AvaTok id, ask the user to confirm
+     * adding it as a contact, and open the conversation on confirmation.
+     * Accepts a raw 40-hex id or a "jami:<hash>" string.
+     */
+    fun confirmAddContact(rawId: String) {
+        val trimmed = rawId.trim()
+        val uriString = if (trimmed.startsWith("jami:")) trimmed else "jami:$trimmed"
+        val uri = Uri.fromString(uriString)
+        if (uri.isEmpty || !uri.isJami) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.qr_code_not_contact)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+            return
+        }
+        val displayId = uri.rawRingId
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.add_contact_dialog_title)
+            .setMessage(getString(R.string.add_contact_dialog_message, displayId))
+            .setPositiveButton(R.string.add_contact_action) { _, _ -> startConversation(uriString) }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     fun startConversation(accountId: String, conversationId: Uri) {

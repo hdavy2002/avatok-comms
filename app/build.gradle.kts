@@ -19,8 +19,8 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 36
-        versionCode = 495
-        versionName = "20260522-01"
+        versionCode = 496
+        versionName = "20260529-01"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -46,10 +46,12 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
+            signingConfig = signingConfigs.getByName("config")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("config")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -71,8 +73,15 @@ android {
     }
     signingConfigs {
         create("config") {
-            keyAlias = "ring"
-            storeFile = file("../keystore.bin")
+            // AvaTok stable signing key. Committed for MVP/CI so every sideloaded
+            // build installs as an in-place update (same key + higher versionCode)
+            // instead of forcing an uninstall — which also preserves the Jami
+            // account/keypair and registered username across updates.
+            // ROTATE to a secret keystore + Play App Signing before Play Store.
+            keyAlias = "avatok"
+            keyPassword = "avatokdev123"
+            storeFile = file("avatok-upload.keystore")
+            storePassword = "avatokdev123"
         }
     }
     compileOptions {

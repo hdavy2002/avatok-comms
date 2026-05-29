@@ -166,6 +166,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <data android:scheme="https"/>
                 <data android:host="link.jami.net"/>
             </intent-filter>
+            <!-- AvaTok contact App Links: https://link.avatok.ai/id/<hash> -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="link.avatok.ai" android:pathPrefix="/id/"/>
+            </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
