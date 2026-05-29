@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="avatok_welcome_title">Welcome to AvaTok</string>
+    <string name="avatok_welcome_sub">Private, peer-to-peer messaging and video. No middleman.</string>
+    <string name="avatok_get_started">Get started</string>
+
+    <string name="avatok_notif_title">Allow AvaTok to send you notifications?</string>
+    <string name="avatok_notif_allow">Allow</string>
+    <string name="avatok_notif_deny">Don\'t allow</string>
+
+    <string name="avatok_username_title">Choose a username for your account</string>
+    <string name="avatok_encrypt_title">Encrypt account with password</string>
+    <string name="avatok_profile_title">Profile is only shared with contacts</string>
+
+    <string name="avatok_recommended">Recommended</string>
+    <string name="avatok_optional">Optional</string>
+
+    <string name="avatok_encrypt_row">Choose a password to encrypt the account key on this device</string>
+    <string name="avatok_encrypt_note">Note that the password cannot be recovered.</string>
+
+    <string name="avatok_choose_username_btn">Choose Username</string>
+    <string name="avatok_skip_username">Skip choosing username</string>
+    <string name="avatok_create_account">Create account</string>
+    <string name="avatok_save_profile">Save Profile</string>
+    <string name="avatok_skip_later">Skip and do this later</string>
+    <string name="avatok_enter_name">Enter your name</string>
+    <string name="avatok_username_hint">yourname</string>
+</resources>

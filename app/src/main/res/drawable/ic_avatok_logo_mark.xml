@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AvaTok "A" logo mark — exact geometry from the design mockups
+     (teal left stroke, darker-teal right stroke, coral dot). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="104dp" android:height="104dp"
+    android:viewportWidth="100" android:viewportHeight="100">
+    <path android:strokeColor="@color/avatok_logo_l" android:strokeWidth="15"
+        android:strokeLineCap="round" android:pathData="M18,82L50,20" />
+    <path android:strokeColor="@color/avatok_logo_r" android:strokeWidth="15"
+        android:strokeLineCap="round" android:pathData="M50,20L82,82" />
+    <path android:fillColor="@color/avatok_coral"
+        android:pathData="M50,56m-8.5,0a8.5,8.5 0 1 0 17,0a8.5,8.5 0 1 0 -17,0" />
+</vector>

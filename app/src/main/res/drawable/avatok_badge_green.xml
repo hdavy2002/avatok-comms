@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="@dimen/avatok_shadow_sm" android:top="@dimen/avatok_shadow_sm">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/avatok_ink" />
+            <corners android:radius="@dimen/avatok_radius_pill" />
+        </shape>
+    </item>
+    <item android:right="@dimen/avatok_shadow_sm" android:bottom="@dimen/avatok_shadow_sm">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/avatok_green" />
+            <stroke android:width="@dimen/avatok_border" android:color="@color/avatok_ink" />
+            <corners android:radius="@dimen/avatok_radius_pill" />
+        </shape>
+    </item>
+</layer-list>

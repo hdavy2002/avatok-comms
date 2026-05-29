@@ -199,7 +199,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             android:exported="false"
             android:resizeableActivity="true"
-            android:theme="@style/AppThemeBase.Light"
+            android:theme="@style/Theme.AvaTok.Onboarding"
             android:windowSoftInputMode="adjustResize" />
         <!--
           Commit B: AvaTok WebView login (sign-in / sign-up /

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AvaTok sticker design — widget styles + the onboarding theme.
+  Scoped: only AccountWizardActivity uses Theme.AvaTok.Onboarding in
+  Phase 1 (see AndroidManifest). Later phases adopt the system app-wide.
+  TODO(font): drop space_grotesk_*.ttf into res/font and set
+  android:fontFamily on the text appearances below to finish the look.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.AvaTok.Onboarding" parent="AppThemeBase.Light">
+        <item name="android:windowBackground">@color/avatok_bg</item>
+        <item name="colorPrimary">@color/avatok_brand_ink</item>
+        <item name="colorOnPrimary">@color/avatok_surface</item>
+        <item name="colorSurface">@color/avatok_surface</item>
+        <item name="colorOnSurface">@color/avatok_ink</item>
+        <item name="android:textColorPrimary">@color/avatok_ink</item>
+        <item name="android:statusBarColor">@color/avatok_bg</item>
+        <item name="android:navigationBarColor">@color/avatok_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="textInputStyle">@style/Widget.AvaTok.TextInputLayout</item>
+    </style>
+
+    <style name="TextAppearance.AvaTok.WelcomeTitle" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/avatok_ink</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
+    <style name="TextAppearance.AvaTok.CardTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/avatok_ink</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <style name="TextAppearance.AvaTok.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/avatok_brand_ink</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="TextAppearance.AvaTok.Note" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/avatok_ink_dim</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Widget.AvaTok.Button.Primary" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/avatok_btn_primary_selector</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textColor">@color/avatok_ink</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:minHeight">58dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">29dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">21dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Widget.AvaTok.Button.Text" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/avatok_brand_ink</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Widget.AvaTok.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/avatok_ink</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="hintTextColor">@color/avatok_brand_ink</item>
+        <item name="android:textColorHint">@color/avatok_ink_mute</item>
+        <item name="startIconTint">@color/avatok_ink</item>
+        <item name="endIconTint">@color/avatok_brand_ink</item>
+    </style>
+
+</resources>

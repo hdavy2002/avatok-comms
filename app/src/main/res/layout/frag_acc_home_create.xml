@@ -1,77 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  AvaTok wizard welcome screen.
-
-  Stripped from Jami's original: removed the GNU package logo + the
-  four extra buttons (Connect from another device, Connect from
-  backup, Connect to management server, Add SIP account). Left only
-  the AvaTok logo header + the single "Create AvaTok account"
-  CTA. Davy's design call 2026-05-27 — testers shouldn't see any
-  paths other than the AvaTok-blessed one.
-
-  HomeAccountCreationFragment.kt still references the removed button
-  IDs via view-binding nullable lookups; the .setOnClickListener
-  calls are guarded with safe-call so the removal is a no-op at
-  runtime.
+  AvaTok onboarding — 01 Welcome.
+  Sticker design: teal page (from Theme.AvaTok.Onboarding), centred
+  logo mark, headline + subtitle, single yellow "Get started" CTA.
+  ring_create_btn is kept (HomeAccountCreationFragment binds it) and
+  now drives presenter.clickOnCreateAccount() on tap.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/color_primary_dark"
-    android:visibility="invisible"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".account.AccountWizardActivity">
 
-    <ScrollView
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
+        android:minHeight="100dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="26dp"
+        android:paddingVertical="40dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_avatok_logo_mark" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical"
-            android:paddingBottom="16dp">
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="@string/avatok_welcome_title"
+            android:textAppearance="@style/TextAppearance.AvaTok.WelcomeTitle" />
 
-            <!-- AvaTok logo. Sized to roughly match what the GNU Jami
-                 logo took up in the original layout so the vertical
-                 rhythm stays balanced. -->
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="100dp"
-                android:layout_height="92dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="32dp"
-                android:contentDescription="@string/app_name"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_avatok_logo" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center"
+            android:maxWidth="300dp"
+            android:text="@string/avatok_welcome_sub"
+            android:textAppearance="@style/TextAppearance.AvaTok.Body" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="18dp"
-                android:gravity="center"
-                android:padding="30dp"
-                android:text="@string/help_ring"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/ring_create_btn"
+            style="@style/Widget.AvaTok.Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:drawableEnd="@drawable/ic_avatok_arrow"
+            android:drawablePadding="10dp"
+            android:text="@string/avatok_get_started" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ring_create_btn"
-                style="@style/WizardButton"
-                android:layout_width="@dimen/wizard_button_width"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableLeft="@drawable/baseline_account_circle_white_36"
-                android:drawableRight="@drawable/baseline_arrow_forward_white_18"
-                android:text="@string/account_new_button" />
-
-        </LinearLayout>
-
-    </ScrollView>
-</RelativeLayout>
+    </LinearLayout>
+</ScrollView>

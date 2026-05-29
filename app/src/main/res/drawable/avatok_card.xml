@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- White sticker card: hard black offset shadow (bottom-right) +
+     2px black border. Content must reserve avatok_shadow_card padding
+     on end+bottom so it doesn't paint over the shadow. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="@dimen/avatok_shadow_card" android:top="@dimen/avatok_shadow_card">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/avatok_ink" />
+            <corners android:radius="@dimen/avatok_radius_lg" />
+        </shape>
+    </item>
+    <item android:right="@dimen/avatok_shadow_card" android:bottom="@dimen/avatok_shadow_card">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/avatok_surface" />
+            <stroke android:width="@dimen/avatok_border" android:color="@color/avatok_ink" />
+            <corners android:radius="@dimen/avatok_radius_lg" />
+        </shape>
+    </item>
+</layer-list>

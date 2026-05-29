@@ -19,8 +19,13 @@ package com.avatok.comms.account
 import android.Manifest
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import androidx.core.content.ContextCompat
+import com.avatok.comms.databinding.DialogAvatokNotificationsBinding
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -284,11 +289,33 @@ class AccountWizardActivity : BaseActivity<AccountWizardPresenter>(), AccountWiz
         if (mAlertDialog != null && mAlertDialog!!.isShowing) {
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        // Pre-Tiramisu (no runtime notif permission) or already granted:
+        // nothing to ask, finish straight away.
+        val needsNotifPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        if (!needsNotifPermission) {
+            finishCreation()
+            return
+        }
+        // AvaTok 2026-05-29: show the sticker notifications pre-prompt
+        // (design screen 05) before the system POST_NOTIFICATIONS dialog.
+        val dialogBinding = DialogAvatokNotificationsBinding.inflate(layoutInflater)
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBinding.notifAllow.setOnClickListener {
+            dialog.dismiss()
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_PERMISSION_NOTIF)
-        } else {
+        }
+        dialogBinding.notifDeny.setOnClickListener {
+            dialog.dismiss()
             finishCreation()
         }
+        mAlertDialog = dialog
+        dialog.show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

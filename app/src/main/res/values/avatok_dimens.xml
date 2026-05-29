@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="avatok_radius">16dp</dimen>
+    <dimen name="avatok_radius_lg">26dp</dimen>
+    <dimen name="avatok_radius_pill">999dp</dimen>
+
+    <dimen name="avatok_border">2dp</dimen>
+    <dimen name="avatok_shadow_card">8dp</dimen>
+    <dimen name="avatok_shadow_btn">5dp</dimen>
+    <dimen name="avatok_shadow_sm">3dp</dimen>
+
+    <dimen name="avatok_screen_pad">26dp</dimen>
+    <dimen name="avatok_card_pad">24dp</dimen>
+
+    <dimen name="avatok_title">21sp</dimen>
+    <dimen name="avatok_welcome_title">34sp</dimen>
+    <dimen name="avatok_body">17sp</dimen>
+    <dimen name="avatok_small">13sp</dimen>
+</resources>

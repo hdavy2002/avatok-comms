@@ -102,20 +102,13 @@ class HomeAccountCreationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Davy 2026-05-27: skip this whole screen — testers should
-        // jump straight from AvaTok landing to the username page
-        // since the only path here is "Create AvaTok account"
-        // anyway. The fragment's root XML is android:visibility=
-        // invisible so nothing of this layout ever paints (kills the
-        // one-frame flash davy reported). Firing in onViewCreated
-        // (not view.post) makes sure the FragmentTransaction commits
-        // before the first draw, so the transition feels seamless.
-        //
-        // Guarded by savedInstanceState being null so a rotation
-        // mid-transition doesn't double-trigger.
-        if (savedInstanceState == null) {
-            presenter.clickOnCreateAccount()
-        }
+        // AvaTok 2026-05-29 (Phase-1 sticker redesign): the Welcome
+        // screen (frag_acc_home_create) is now a real, visible step.
+        // The single "Get started" CTA (ring_create_btn, wired in
+        // onCreateView) advances to username creation. The earlier
+        // auto-skip was removed so the onboarding flow matches the
+        // approved design: Welcome -> Username -> Encrypt -> Profile
+        // -> Notifications.
     }
 
     override fun onDestroyView() {

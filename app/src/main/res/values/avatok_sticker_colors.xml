@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AvaTok "sticker" design tokens — ported verbatim from
+  avatok/design/avatok-phone-app-design/onboarding.css :root.
+  Light-only system: light-teal page, white sticker cards with black
+  borders + hard offset shadows, Space Grotesk type, yellow primary
+  buttons, turquoise accents. Names are prefixed `avatok_` to avoid
+  collisions with the existing Jami palette.
+-->
+<resources>
+    <color name="avatok_bg">#D7F2F6</color>
+    <color name="avatok_bg_2">#C9EEF3</color>
+    <color name="avatok_surface">#FFFFFF</color>
+
+    <color name="avatok_brand">#4DCFE0</color>
+    <color name="avatok_brand_ink">#1A7F8E</color>
+    <color name="avatok_brand_soft">#C9F0F6</color>
+
+    <color name="avatok_ink">#0A1416</color>
+    <color name="avatok_ink_dim">#1A7F8E</color>
+    <color name="avatok_ink_mute">#5B8C93</color>
+
+    <color name="avatok_yellow">#FFD84D</color>
+    <color name="avatok_green">#2EE59D</color>
+    <color name="avatok_pink">#FF6B6B</color>
+    <color name="avatok_coral">#F0544E</color>
+    <color name="avatok_purple">#6E5BFF</color>
+
+    <color name="avatok_logo_l">#2CBFB0</color>
+    <color name="avatok_logo_r">#239E94</color>
+
+    <color name="avatok_disabled_bg">#EAF1F2</color>
+    <color name="avatok_disabled_border">#9FB6BA</color>
+</resources>

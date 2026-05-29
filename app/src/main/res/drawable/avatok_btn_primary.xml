@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Yellow pill primary button + black border + hard offset shadow. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="@dimen/avatok_shadow_btn" android:top="@dimen/avatok_shadow_btn">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/avatok_ink" />
+            <corners android:radius="@dimen/avatok_radius_pill" />
+        </shape>
+    </item>
+    <item android:right="@dimen/avatok_shadow_btn" android:bottom="@dimen/avatok_shadow_btn">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/avatok_yellow" />
+            <stroke android:width="@dimen/avatok_border" android:color="@color/avatok_ink" />
+            <corners android:radius="@dimen/avatok_radius_pill" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,81 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  AvaTok onboarding — 02 Choose username (pager page 0).
+  Sticker card. IDs preserved for JamiAccountUsernameFragment:
+  input_username, input_username_txt_box, ring_username_availability_spinner,
+  create_account_username, skip.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.avatok.comms.account.AccountWizardActivity"
+    android:clipChildren="false"
     android:clipToPadding="false"
-    android:clipChildren="false" >
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:cardCornerRadius="@dimen/wizard_card_radius">
+    tools:context="com.avatok.comms.account.AccountWizardActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/avatok_card"
         android:orientation="vertical"
-        android:paddingTop="@dimen/wizard_card_padding"
-        android:paddingStart="@dimen/wizard_card_padding"
-        android:paddingEnd="@dimen/wizard_card_padding"
-        android:paddingBottom="10dp"
-        android:clipToPadding="false"
-        android:clipChildren="false">
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="32dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <TextView
                 android:id="@+id/info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginRight="4dp"
-                android:textStyle="bold"
-                android:text="@string/wizard_username_info"/>
+                android:layout_marginEnd="12dp"
+                android:text="@string/avatok_username_title"
+                android:textAppearance="@style/TextAppearance.AvaTok.CardTitle" />
 
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wizard_status_recommended"
-                android:textSize="@dimen/wizard_text_size"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:background="@drawable/background_status_recommended"
-                android:padding="6dp"/>
+                android:background="@drawable/avatok_badge_green"
+                android:paddingStart="13dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="10dp"
+                android:text="@string/avatok_recommended"
+                android:textColor="@color/avatok_ink"
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_username_txt_box"
-                android:layout_width="0dp"
+                style="@style/Widget.AvaTok.TextInputLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="18dp"
-                app:startIconDrawable="@drawable/baseline_account_crop_24">
+                app:startIconDrawable="@drawable/ic_avatok_person">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="username"
-                    android:hint="@string/prompt_hint_username"
+                    android:hint="@string/avatok_username_hint"
                     android:inputType="text"
                     android:lines="1"
-                    android:maxLines="1"/>
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,36 +85,28 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:visibility="invisible"
-                app:layout_constraintRight_toRightOf="@id/input_username_txt_box"
-                app:layout_constraintTop_toTopOf="@id/input_username_txt_box"
-                app:layout_constraintBottom_toBottomOf="@id/input_username_txt_box"
-                android:layout_marginRight="12dp"/>
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"
+                android:visibility="invisible" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/create_account_username"
-            style="@style/WizardButton"
-            android:layout_width="@dimen/wizard_card_button_width"
+            style="@style/Widget.AvaTok.Button.Primary"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/wizard_username_button"
-            android:enabled="false" />
+            android:layout_marginTop="24dp"
+            android:enabled="false"
+            android:text="@string/avatok_choose_username_btn" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/skip"
-            style="@style/TextButton"
-            android:layout_width="wrap_content"
+            style="@style/Widget.AvaTok.Button.Text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/wizard_username_skip"
-            android:textColor="@color/grey_500"
-            android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/wizard_text_size" />
+            android:layout_marginTop="6dp"
+            android:text="@string/avatok_skip_username" />
 
     </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
 </FrameLayout>

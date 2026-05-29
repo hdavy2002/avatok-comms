@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Transparent circle with a 2px black sticker border, used as an
+     ImageView foreground to ring the generated avatar. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@android:color/transparent" />
+    <stroke android:width="@dimen/avatok_border" android:color="@color/avatok_ink" />
+</shape>
