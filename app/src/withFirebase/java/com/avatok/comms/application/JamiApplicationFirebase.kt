@@ -110,10 +110,21 @@ class JamiApplicationFirebase : JamiApplication() {
     // ---- Phase 2.5: Cloudflare Realtime TURN -------------------------------
 
     private val turnHandler = Handler(Looper.getMainLooper())
+    private var turnFastRetries = 0
     private val turnRunnable = object : Runnable {
         override fun run() {
-            maybeRefreshTurn()
-            turnHandler.postDelayed(this, TURN_RECHECK_INTERVAL_MS)
+            // On cold start the account may not be loaded yet; maybeRefreshTurn()
+            // no-ops in that case. Rather than wait the full recheck interval,
+            // retry every 10s (capped) until the account exists, so the
+            // Cloudflare TURN config is applied promptly on first launch.
+            val accountReady = mAccountService.currentAccount != null
+            if (accountReady) {
+                maybeRefreshTurn()
+                turnFastRetries = 0
+            }
+            val delay = if (!accountReady && turnFastRetries++ < 30)
+                10_000L else TURN_RECHECK_INTERVAL_MS
+            turnHandler.postDelayed(this, delay)
         }
     }
 
