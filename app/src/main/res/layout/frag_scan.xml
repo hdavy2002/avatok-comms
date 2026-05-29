@@ -21,4 +21,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/upload_qr_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="16dp"
+        android:text="@string/upload_qr_image" />
+
 </FrameLayout>

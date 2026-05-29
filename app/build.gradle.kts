@@ -43,6 +43,19 @@ android {
             }
         }
     }
+    signingConfigs {
+        create("config") {
+            // AvaTok stable signing key. Committed for MVP/CI so every sideloaded
+            // build installs as an in-place update (same key + higher versionCode)
+            // instead of forcing an uninstall — which also preserves the Jami
+            // account/keypair and registered username across updates.
+            // ROTATE to a secret keystore + Play App Signing before Play Store.
+            keyAlias = "avatok"
+            keyPassword = "avatokdev123"
+            storeFile = file("avatok-upload.keystore")
+            storePassword = "avatokdev123"
+        }
+    }
     buildTypes {
         debug {
             isDebuggable = true
@@ -69,19 +82,6 @@ android {
         }
         create("withUnifiedPush") {
             dimension = "push"
-        }
-    }
-    signingConfigs {
-        create("config") {
-            // AvaTok stable signing key. Committed for MVP/CI so every sideloaded
-            // build installs as an in-place update (same key + higher versionCode)
-            // instead of forcing an uninstall — which also preserves the Jami
-            // account/keypair and registered username across updates.
-            // ROTATE to a secret keystore + Play App Signing before Play Store.
-            keyAlias = "avatok"
-            keyPassword = "avatokdev123"
-            storeFile = file("avatok-upload.keystore")
-            storePassword = "avatokdev123"
         }
     }
     compileOptions {
